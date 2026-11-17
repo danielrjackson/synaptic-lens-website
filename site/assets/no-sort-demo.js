@@ -37,7 +37,7 @@ async function start(){
  for(let i=0;i<32;i++){const b=element('button',String(i+1));b.type='button';b.dataset.slot=String(i);b.setAttribute('aria-label',`Hide physical neuron ${i+1}`);b.addEventListener('click',()=>{slot=i;render();});$('slots').append(b);}
  $('method').addEventListener('change',e=>{method=e.target.value;render();});$('coordinates').addEventListener('change',e=>{coordinates=e.target.value;render();});
  let shuffled=false; $('shuffle').addEventListener('click',()=>{shuffled=!shuffled;const buttons=[...$('slots').children];const byId=new Map(buttons.map(b=>[Number(b.dataset.slot),b]));const order=shuffled?data.saved_permutation:Array.from({length:32},(_,i)=>i);$('slots').replaceChildren(...order.map(i=>byId.get(i)));$('shuffle').textContent=shuffled?'Restore original display order':'Shuffle the display';});
- const url=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));$('download').href=url;$('download').download='no-sort-example.json';
+ const url=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));$('download').href=url;$('download').download='neuron-completion-example.json';
  render();$('loading').hidden=true;$('experiment').hidden=false;
 }
 start().catch(error=>{$('loading').textContent=`${error.message} Serve the site over HTTP, then reload. The JSON download remains available below.`;$('loading').setAttribute('role','alert');const a=element('a',' Download example data');a.href='../assets/no-sort-example.json';$('loading').append(a);});
