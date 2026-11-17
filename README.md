@@ -46,3 +46,14 @@ Blog posts are written from Daniel's perspective. Daniel must review and approve
 `migration-manifest.json` records the SHA-256 of each imported website file at software commit `2ae3fd8df7977cca668355ef4dc89cd606cdeda4`. It is an import receipt, not a lock on later edits. Additions during migration are the requested authorship disclosure and the separately verified custom-training-image gallery, with its homepage link. The gallery was reviewed at `d11baa8159276e77724ab3fc0e9ed2640f017baa` before import.
 
 Public demo naming and summaries focus on predicting missing neurons. The old demo URL redirects to `examples/neuron-completion.html`. The approved article body is preserved; its metadata and eyebrow use the same central framing.
+
+## Public navigation
+
+- `/`: project introduction and featured experiments.
+- `/explore/`: interactive examples, released models, and run/train paths.
+- `/research/`: source-linked milestones, within-study comparisons, and research directions.
+- `/blog/`: author-reviewed articles. Navigation updates must preserve approved article bodies.
+
+Keep historical URLs and section anchors working. Research graphics must name the
+metric, population and comparison, and must not combine unrelated studies into a
+single progress score. Roadmap items describe directions rather than release promises.
