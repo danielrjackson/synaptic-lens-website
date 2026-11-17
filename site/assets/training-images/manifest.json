@@ -2,7 +2,7 @@
   "schema": 2,
   "collection": "SYN93 redesigned population with sprite repair, used by SYN94",
   "split": "TRAIN",
-  "selection": "First three rows per class from a fit root per family",
+  "selection": "First three rows per class, except arrows: 1st/50th/99th raster-axis percentiles from the same fit TRAIN root",
   "source_manifest_sha256": "65b0e64c8c829448cd28807acd9423ec9f1d9035b7de74d9d7dece2e4e52463e",
   "families": [
     {
@@ -1506,273 +1506,358 @@
         {
           "class": 0,
           "variant": 0,
-          "row": 10,
-          "design_id": "90ee956886e501f0c9d53eb5e54a6793f93b082d41bc84ba6168b4d3ba1f9220",
+          "row": 15590,
+          "design_id": "527b6e93ea9ba4366c63392597a4371a277f7a55e07f210638724b1a81fd500d",
           "file": "arrows/class-0-0.png",
-          "pixel_sha256": "01f9f0d5930e2e5c2a276f0ae09e30e17c0c0031612b7f063466c3e41a5884a3",
-          "file_sha256": "2f6e9aa645a14a8137b2631193cd558a11475ea6406e01305660e1f6b779d829"
+          "pixel_sha256": "09ce67ab21606bc4dd3cbb646d9d7b47df2f384ffa9fa81fcbf0a690be2a7199",
+          "file_sha256": "8a3a245fd16dce0520dbbbcc3b1079b07feeae60ebdcf173105da1e00c47969c",
+          "selection_axis_degrees": 15.120376570768144,
+          "selection_quantile": 0.01
         },
         {
           "class": 0,
           "variant": 1,
-          "row": 15,
-          "design_id": "db0bed1a6d82f8328855bb15cb0683a8f932e822b3eb1dfbc3498dee1c487e7b",
+          "row": 21758,
+          "design_id": "f6a352dd1b9c2475584861757ffc059bc1578a0b11a1f202119858972506a4a2",
           "file": "arrows/class-0-1.png",
-          "pixel_sha256": "bfeb5b5b152eb4e047e971a79ca319a6314c6fc420f3b5ad6dc926fd2d3182f3",
-          "file_sha256": "6fc3d28e5dc4b463079eb40f4dd082a31a2d9a760fd881bf46504e9471f43030"
+          "pixel_sha256": "538fbdff1aae1da8c875ccd268ade8552efbbec32a63bd43e286cf45109c0927",
+          "file_sha256": "96704e1a8ff3a8b25136801a31f87a46ac3e84675c4f8695befb88fdde0f5ab2",
+          "selection_axis_degrees": 18.28320451194236,
+          "selection_quantile": 0.5
         },
         {
           "class": 0,
           "variant": 2,
-          "row": 27,
-          "design_id": "2f2a0c629033db1f4bc157527c4eb99e30f178f8a909310e1c71a8bad7042cf8",
+          "row": 29154,
+          "design_id": "a6edd3212dafef6cec931a06bb8ea537ea5efed1b375bcf9173898449e03fb7c",
           "file": "arrows/class-0-2.png",
-          "pixel_sha256": "079daade8022a7eaae45e95f066459e9e4aa98ce93d9b3f15d7c30472702ab94",
-          "file_sha256": "eb0c2358640260f5b23791378971b438c331e47cc079d3cc2817694fb61cbc33"
+          "pixel_sha256": "384cf23a2d60f9851461e2cf9dfd0363a281950329835e7d4c1180f60192d25b",
+          "file_sha256": "024a9109438e1d819138ec31136d3a0416bcc9828b957173c5c4736b2048699e",
+          "selection_axis_degrees": 20.90424252002606,
+          "selection_quantile": 0.99
         },
         {
           "class": 1,
           "variant": 0,
-          "row": 4,
-          "design_id": "7bf1446c11bb76d515d6107c552f1703b054c82646c991093cf5c97627e125bd",
+          "row": 46475,
+          "design_id": "ad13b5ab17e398368fcdb4ebf6929a7c696f7edb523467a5c09d72ce89ae8a9d",
           "file": "arrows/class-1-0.png",
-          "pixel_sha256": "be9d1374347fdb9f759e8b1ed45597a6913b12fd176a38a86c7838c734ded658",
-          "file_sha256": "1eb82b64ad0a4af2fa04ced34e9257f7e53131be3bae3e8d1b390afc402a264f"
+          "pixel_sha256": "7c65dc7880c614d32c82852c1b8a84df96b52cc2b7e09b2890a7f8ba91ebd716",
+          "file_sha256": "544e9c467797714535bf4324204da3d5cf6a33e123a08d09d8fb926c9dbb833b",
+          "selection_axis_degrees": 51.22315370079423,
+          "selection_quantile": 0.01
         },
         {
           "class": 1,
           "variant": 1,
-          "row": 9,
-          "design_id": "dd962712d724b059406990835e6db56f052cf6cd57ceb7b97e5b82c713371fa2",
+          "row": 16158,
+          "design_id": "342dcbea30513098665adfcc8cf44fd0c9a6b482d892da0ebcfe44a3b54ec722",
           "file": "arrows/class-1-1.png",
-          "pixel_sha256": "c9bb2cf13ba3cda5f1bf280c3d3f489fcbba0f5a9cbf6b60d5c277fd93359b55",
-          "file_sha256": "9e9e8a0c248aa5b1c2cd9f256ab4d47df264478348eb56a9c17019343c28b21f"
+          "pixel_sha256": "651fa703de750d597d0a2a6255ae53abcb7adb4255732350a50ad628047fb87e",
+          "file_sha256": "2d382937d94f6fbbc1f91df634cd7d516c8c30b08b06fb235932487f0a4d6e1b",
+          "selection_axis_degrees": 54.29626614035425,
+          "selection_quantile": 0.5
         },
         {
           "class": 1,
           "variant": 2,
-          "row": 13,
-          "design_id": "f332959199e4eb585f5c2c180bbd3cf6a98b751a0763a73ad600f4b24ceeb28a",
+          "row": 40672,
+          "design_id": "e2e096fe8a9249336d329236346227cf59a2d69fffea975bb865eebafe9e694f",
           "file": "arrows/class-1-2.png",
-          "pixel_sha256": "c6b4ecb03ec46d3a5bb4ee62daf66c0f92c6378eb9e90e90a69af1fbda8ad19e",
-          "file_sha256": "c476bdf0b205cb79bb2f87037701dba40c3c84407572613965ffe5c519eea5c1"
+          "pixel_sha256": "f9f4ea6d561f3d0b46a498a881035d565b00bbbe62e11093bc4606574412348b",
+          "file_sha256": "06e09abeee20bb4c019bd11c42bb07d874fda611f8057bc1660cdcfaee44bfe7",
+          "selection_axis_degrees": 56.83026840022825,
+          "selection_quantile": 0.99
         },
         {
           "class": 2,
           "variant": 0,
-          "row": 2,
-          "design_id": "46ecc89dd01784876a34df7d11f26df19c15c329bf49b8e7cba40a23750c1e22",
+          "row": 15748,
+          "design_id": "8001fb042b3ccdafeb375e378d60c9a04f5062deb2c07052093ed22bd57b15cc",
           "file": "arrows/class-2-0.png",
-          "pixel_sha256": "876c3367c86e58a06c89da345f4958cf43a88949f2b714748afb01025e0aa505",
-          "file_sha256": "5cbeeb455d40e6ee8ec5ef02335cde1793a781228dcb9e023f885883de519fbc"
+          "pixel_sha256": "be8aeb3c4075561a82cb66e113f4f1a6d116d4b8df3bda3b6fe12e200f41ad26",
+          "file_sha256": "0adeff83d37e0edcbf0e78bec758b65b913311ed227b42f904e768a01063f79a",
+          "selection_axis_degrees": 86.30092248255846,
+          "selection_quantile": 0.01
         },
         {
           "class": 2,
           "variant": 1,
-          "row": 12,
-          "design_id": "4cdbcfbac7cb76e75b419de8a2c1c0d95b7cd8303351a5c6827a353d3010b4f8",
+          "row": 30796,
+          "design_id": "7cdd1559f6a162bd34c98a99e7465e4743700623b2404cf7ed063d4b4024d323",
           "file": "arrows/class-2-1.png",
-          "pixel_sha256": "64356db5e84e79d52df204e84a71d955f7b6fdeb5f52e0cd438da58afdc5ce8e",
-          "file_sha256": "e2259490400b8ecd8ea789aeb55aa57876ca399afd9d24bed318bcca9086ff5d"
+          "pixel_sha256": "945fff33ba4e5cef9328e36cb3763ed164564c3c8b23654b9907d79847d9bfe2",
+          "file_sha256": "aa6c36bc0d77ccaa9de1b2553c236ad8d40aa0f5b86052832a11cf80df162e09",
+          "selection_axis_degrees": 90.0,
+          "selection_quantile": 0.5
         },
         {
           "class": 2,
           "variant": 2,
-          "row": 18,
-          "design_id": "1cc770a8b822adc8368f680f181fd15c627e4808a1263e714fc6a45701a6e0cc",
+          "row": 45143,
+          "design_id": "9021b7ba992725cc23dfad3fb8e91df2490d5753ff15da6ae93af713fabab434",
           "file": "arrows/class-2-2.png",
-          "pixel_sha256": "bfb45d588df089744c757cb8433023a230540eaa13edcec4afa65499b85c8d4a",
-          "file_sha256": "4ee5f9f11bdcd6b437d2cb00f73d5040350f989c5e690868efd376d0c66a2ad4"
+          "pixel_sha256": "f5ed38d31736bd07266eb61414c0c4f19b6e228b41ac0cfa7452ab76d82d8705",
+          "file_sha256": "8868fc8edd2c2b4a93e56692f1f695be103fcd95fb9110742697453ab8e9dfad",
+          "selection_axis_degrees": 94.04366376710703,
+          "selection_quantile": 0.99
         },
         {
           "class": 3,
           "variant": 0,
-          "row": 3,
-          "design_id": "afffc8bb60a250065af9d470d2da709d9126797d22bb6b1b6fb083434073ed0a",
+          "row": 32065,
+          "design_id": "b071f33eaa7b0126cb908754d2b470fe5db47d5e5ad6db15d43ab7d5550cb3ca",
           "file": "arrows/class-3-0.png",
-          "pixel_sha256": "87c38fd898d9c328f848efa6f33b63b5a60dc41396f66c46934cc0b86fc6a6b3",
-          "file_sha256": "c3de649be20832422c3aed91558e7aed23a766206c8b9b563f0799681d61499c"
+          "pixel_sha256": "3a1bf7fc325b8030183e0c54859931848a5ec40d970ff68d9febf5af7cdee56e",
+          "file_sha256": "fb0461413f883ae93241bf2da77f1019d3ecf9382b54212e416f9171ddb83b57",
+          "selection_axis_degrees": 123.16045404213003,
+          "selection_quantile": 0.01
         },
         {
           "class": 3,
           "variant": 1,
-          "row": 26,
-          "design_id": "d3cea2af5077b5ec6eafbd1d4bd2d3dd648c50ac320c7788e1a65437cb361179",
+          "row": 1099,
+          "design_id": "af35f005b2b63422b1f55568170387607e33fc58efdb638c2ec627f1204e3ea7",
           "file": "arrows/class-3-1.png",
-          "pixel_sha256": "550b3a4ee686d8dbefee7f05a7de7de0daaa65688f30220cb6ce3a37f6da0268",
-          "file_sha256": "212c563540447bf3a7d1bca9550d944174dbedfe62b959e0867a373b09032e80"
+          "pixel_sha256": "b2a673a3536abe04feabd0eb6578901e6e675aedbad95dd50466c14cb6c7655d",
+          "file_sha256": "4b1be0747a75d42ca8e700e3a5aed702f8c663dec658da6b21fff0ce4651167f",
+          "selection_axis_degrees": 125.65033455029186,
+          "selection_quantile": 0.5
         },
         {
           "class": 3,
           "variant": 2,
-          "row": 39,
-          "design_id": "c4528b79e6be17f766d86608abfd3835e6e2cb517322f3ecee128c9558a6a756",
+          "row": 20387,
+          "design_id": "8a07c158b2132bc9ecfc09c9b5b2777be330735b652c01675f043f012b96375c",
           "file": "arrows/class-3-2.png",
-          "pixel_sha256": "3f40fe6ebb6b550cb21e300785a72a5ec4283141ce3581ba6f6a56ff28b2be12",
-          "file_sha256": "4f683c94099d46db44bf4942772c995bfed4c7ac3c764c819e6fb34a18ca05e8"
+          "pixel_sha256": "c415154f17db9e59c66f0d0079474caf87d84460900ce4d2147083ca1ea2f2f7",
+          "file_sha256": "5c97dfaff118cb44f0b73c5f6d233a4d72c2cab7a39af21678fc8b9a3c9ea100",
+          "selection_axis_degrees": 128.54067470080065,
+          "selection_quantile": 0.99
         },
         {
           "class": 4,
           "variant": 0,
-          "row": 6,
-          "design_id": "ff435fa0c988c13f74bb2941a98312694cad76c9ce48f72f047467c0e38c46ae",
+          "row": 49567,
+          "design_id": "d0179d48e693c55edfd8e05f1d362ef29789d0d0acc45f1fb7a9f141f58d394e",
           "file": "arrows/class-4-0.png",
-          "pixel_sha256": "fdd384fa0778085d957c1df50efc8352f9f8e24deb1bdf797ceca135e09b932b",
-          "file_sha256": "a4b42ab928b63568b233e2ca75cbe47df4c40f02f9582bc70df28efb6d83f209"
+          "pixel_sha256": "c9b2207eab71ac388307656574fdce3dc705ff5f02e0c9909b91d741515e4e1d",
+          "file_sha256": "83c52ef9cd2883b2ec822761107dbe6d87159ed40affc1d73e32d7f3183a67db",
+          "selection_axis_degrees": 158.81520158455024,
+          "selection_quantile": 0.01
         },
         {
           "class": 4,
           "variant": 1,
-          "row": 7,
-          "design_id": "fd61fcd163973a5bfbbc4cbd63d46079dc7b2838538911b3965e1d4637568411",
+          "row": 29679,
+          "design_id": "06b972f82c9e809ee65191638a975ca9855e9d43b9d75455a3227cf48dcb280b",
           "file": "arrows/class-4-1.png",
-          "pixel_sha256": "6a9b91fe0437a421501a5b79915f6b417f8f15d00d57401c79509b2d455b8b1b",
-          "file_sha256": "7357d8248632337ee80f4597b1556daa8d8b93364c2d4ffe4ce0c08238779937"
+          "pixel_sha256": "ec62a80503581832a32d01ae196b6ac0b4b3f1b061b617774fc94c83034d5f36",
+          "file_sha256": "0cde44651f547048934f2454d385e48f83e2962c4d9d7828c45a7a1e82cc1b1b",
+          "selection_axis_degrees": 161.7319936303579,
+          "selection_quantile": 0.5
         },
         {
           "class": 4,
           "variant": 2,
-          "row": 8,
-          "design_id": "82b6a9b9e079b2707b2f758e0e8f4aa7a38ffa2254bdd6e03bea9d657e93ab05",
+          "row": 7284,
+          "design_id": "5d5ffc1464e0535870df288245b56e8c8d5c5d41906bad78be67bd97ecc66b32",
           "file": "arrows/class-4-2.png",
-          "pixel_sha256": "345539e1270c3823d4bfcc4a5860452c2a657cc67d6563c4df86558ace20f81f",
-          "file_sha256": "e345bd62de459542cc5c72d925b3b0a0ea063e70e40f0379940ac140a0432710"
+          "pixel_sha256": "efcd8fe5340dcbd0337e825cb1b18db3643737626667635865ac83c46902db9a",
+          "file_sha256": "59fb0c5b05650b598f3b2074ea0f26ba144e00c40c3f483e555cbf8eb8ace9b1",
+          "selection_axis_degrees": 164.86568854083862,
+          "selection_quantile": 0.99
         },
         {
           "class": 5,
           "variant": 0,
-          "row": 14,
-          "design_id": "40caeae6a65883b0a44276b673619c1d49f915f4690818d57a7563dd79caa707",
+          "row": 47421,
+          "design_id": "46ab20a6ba75dd6a5ff0d5a0eb47acfe16d3d2dd401f6466a3b68cbf9540b7aa",
           "file": "arrows/class-5-0.png",
-          "pixel_sha256": "bc8488d9d1ee8e7e05e9cd2435e1330cd4a694de2a1c714cb93470a65d50fa35",
-          "file_sha256": "be5be652fca40b2fb3e612d3558505ba62dec09e0dd977d3fe1ff53b674c8ff5"
+          "pixel_sha256": "8b503362fd00f87e4fa2edeb44d259aa7166e00120cb26dc06e3ca94048cdc93",
+          "file_sha256": "c9782735a3e2c310ffe0530e5f27e2d226350d653de5ed7eb52b16e8828c0df1",
+          "selection_axis_degrees": 195.3622979885458,
+          "selection_quantile": 0.01
         },
         {
           "class": 5,
           "variant": 1,
-          "row": 16,
-          "design_id": "eb60aaaecaba3b70d339086149ba3f711e268fce6e2bc9851f45405d60c96952",
+          "row": 43913,
+          "design_id": "9c2419ecb87d1c01a69c10d30d7a5eac3364a52b99aeb6ebc11acb5718eb908d",
           "file": "arrows/class-5-1.png",
-          "pixel_sha256": "2e678ae5db412692a283fb989d8d12e6387fdd0a35bf941f562521b32af861ee",
-          "file_sha256": "2bfd82deb8d65c39de8ebf80835303ec929218bac4c20102935acbe19eaf27f4"
+          "pixel_sha256": "d82a40946dac3759cfe19142d43666a66c46d96ba97198d834dbb4f54c1e78a4",
+          "file_sha256": "b1cca292e474691072cadc768c4a41a40979e7cd32387a7c21f11fbcdaea222c",
+          "selection_axis_degrees": 198.1181747482482,
+          "selection_quantile": 0.5
         },
         {
           "class": 5,
           "variant": 2,
-          "row": 17,
-          "design_id": "3e56ea0e5a5807bc06b8b6408932f60dea863f0f0d5defa9854a14a8918b5263",
+          "row": 22235,
+          "design_id": "c054d7103fe638ea9910a93416c1c727025aee1ac6c46fde0d7fc73094144414",
           "file": "arrows/class-5-2.png",
-          "pixel_sha256": "f0cec2604c7d383381991a10f6013e1f9a63d01ea5e004af10f97cfffdbc863a",
-          "file_sha256": "d97f5c3207ec16050dfeef8260e471a316e88dbc1334ba97d1da081ac8346830"
+          "pixel_sha256": "d44517ad53b146517b3b88d1b45a0ecacc1382f095d5b06671f6538afe5ae762",
+          "file_sha256": "fb670c853ad6d754f439ebea810fc0b922c308f4a773e8350980c5a9bfefc65b",
+          "selection_axis_degrees": 200.8571314148745,
+          "selection_quantile": 0.99
         },
         {
           "class": 6,
           "variant": 0,
-          "row": 11,
-          "design_id": "0c221a7d930887afdf46c3f994b846d643e54b69391b2b07da8bda14c512ea07",
+          "row": 30471,
+          "design_id": "ad2b9909961ad1ab3d99d7675cce6c5e21975d37db4f6ac5ee2014d9c198add0",
           "file": "arrows/class-6-0.png",
-          "pixel_sha256": "4c9b6d7512b6dfd4df1b377c756f5f3ecd903419d3c8e621940cae30b5e63339",
-          "file_sha256": "fe0b9a7f05283c16d7a5be42fa3ba3cf2718402908074c31685bfa540ac7d733"
+          "pixel_sha256": "ee6ce88a0e95f50bfe0d1c475cac08dd4cb3305d2145b948a4d13de1da5779f7",
+          "file_sha256": "2dd5b8bea738d28cbdcd8774a957f3417a859f98348dff5435d90e75c400471f",
+          "selection_axis_degrees": 230.99539542487992,
+          "selection_quantile": 0.01
         },
         {
           "class": 6,
           "variant": 1,
-          "row": 31,
-          "design_id": "0584e9050a6045527fe0cc868bb2a52d8dc10eaa5011c0e5cb1ed516f82312f2",
+          "row": 45469,
+          "design_id": "2a102705702e639a0c9b4d45e0ea126bd96df6c8064aca90286a7a56e80d252c",
           "file": "arrows/class-6-1.png",
-          "pixel_sha256": "bf4f9de75643f802eaf6a769ff29eb1880b379bc6f4980e730d6779cba6d50a7",
-          "file_sha256": "6f59d87c7bb965c3ced3910d5f7652a5789cb0dbacd4336d32154a4ad47ec155"
+          "pixel_sha256": "d71f4aa4412471394e7102cb9c55897deb9a4d7617e65b6d9a8b3e35717deac0",
+          "file_sha256": "596a482df4dd63f157ef079ef20096cc7fb62bfd7177e6bee05752cae9329c20",
+          "selection_axis_degrees": 234.3222910435224,
+          "selection_quantile": 0.5
         },
         {
           "class": 6,
           "variant": 2,
-          "row": 37,
-          "design_id": "64cb3f332c48a710c5e21e89aca192cd36dfb23922a67bc9b9fcefed7b7229b8",
+          "row": 15320,
+          "design_id": "70b7b0d9676deca6048aa8ce84f2bb5e11d7c9cb489d0bde867e9aaae518e9b2",
           "file": "arrows/class-6-2.png",
-          "pixel_sha256": "643e1c813a630a44c3a9b0a1bb4a83e4f3d59d590e1068c410daca38f81fa34d",
-          "file_sha256": "ad79770d2c0802f8c39e8461755cc8f406effc13c7ba1fef5c9a7c40c7e54176"
+          "pixel_sha256": "37530d45cecc4b68f16b6a31dadd76485f0242109c059405a5de6fb26d598a85",
+          "file_sha256": "c82c59158ff31fd5737a6ae2845f2bc37dca668bce83ff6ebda807ccdace3350",
+          "selection_axis_degrees": 236.87836113881815,
+          "selection_quantile": 0.99
         },
         {
           "class": 7,
           "variant": 0,
-          "row": 1,
-          "design_id": "c72e466c39fc9355bf12a77d0bbb67ef1188b0c239f46ea01fddcce4b54d6398",
+          "row": 30082,
+          "design_id": "c8aad9240c9e19a2aca761e22dd5f80a8d3908c621c0fcbae3d2fbafce389efc",
           "file": "arrows/class-7-0.png",
-          "pixel_sha256": "7621565037458063170b2ddb1880b86a3aff48d1b39d5c508a3086fdeab833c5",
-          "file_sha256": "04997f704280c52bfdf27ef9fbe19a8f40754988d8483770fcf85d151dc8d645"
+          "pixel_sha256": "ee6d09648260eea7144495f0eaec9dcbc541dededc132f0146a0a3288d777d24",
+          "file_sha256": "45b491f230610b507ce58106149cdd376c6889f81667c15d36a063328e1439d4",
+          "selection_axis_degrees": 266.21678146082644,
+          "selection_quantile": 0.01
         },
         {
           "class": 7,
           "variant": 1,
-          "row": 28,
-          "design_id": "4a97bd1d4494ebe67beab76169723297bc3058ce99bd3fcc11b854667510ae41",
+          "row": 5993,
+          "design_id": "8c57145755d211aba53f02576959720e2ee4dca8508e22f0fde2c904b9535ef2",
           "file": "arrows/class-7-1.png",
-          "pixel_sha256": "1ab72e1d35398d159e1da0ddd6ae2c3db9931d1bc426418e2c4848e3e6768246",
-          "file_sha256": "768a59c07dc76e0257ee176b8e30685dfa09bba26fcadf69e284e5d8e2a34f62"
+          "pixel_sha256": "8def78ded3bf7c45fc0929b5eab3f1f2dca68b6a647dd0cfd3eecc9f3e0db6f3",
+          "file_sha256": "9b886d5a4ad518c131a48d57f3b75307b6c5079e4a80955c8cf54810145b2960",
+          "selection_axis_degrees": 270.0,
+          "selection_quantile": 0.5
         },
         {
           "class": 7,
           "variant": 2,
-          "row": 47,
-          "design_id": "eef4280678a73c7ac3910088a964d3656ee4dae104bccb8b826d65d455684af7",
+          "row": 22271,
+          "design_id": "5230a50f054af160757308fdb182e725c498473ed0480f54baf6011801b86947",
           "file": "arrows/class-7-2.png",
-          "pixel_sha256": "d6847729db87d765152fa8055843bf61bb30fc1382a63b54c104aa81394a8a31",
-          "file_sha256": "2541d92a58eaf2abbebf792654a7cbd9c7b962536505549f4096e8b92d2d67e3"
+          "pixel_sha256": "fe53be3457de45721518cd0e36c74f1416f12b553037d553eb3bc59941c3313d",
+          "file_sha256": "014aad81188584448e059e462fe10b4a71caa0091a89f86c6cc0919d6b66d57e",
+          "selection_axis_degrees": 274.04617549943526,
+          "selection_quantile": 0.99
         },
         {
           "class": 8,
           "variant": 0,
-          "row": 0,
-          "design_id": "24e81d4d0084ac060dae9439f604f153c34233ead0e54deb509de222a40baebb",
+          "row": 23366,
+          "design_id": "88390c27845a1e9a4a3dc1af003037a4c3526f45016a4968e2721d0ede4fb14d",
           "file": "arrows/class-8-0.png",
-          "pixel_sha256": "9b53f13144bede3540b5e3aa627661fd91cbca79879255c4a15d55c2c3683669",
-          "file_sha256": "f6106988a834753d41db65005087bb97db09dd42e762ad1f79db37ac9a2f7e67"
+          "pixel_sha256": "8110b4fa14a9667e6bf91f2ff722471b812f016a0906d9fec07c82617e957934",
+          "file_sha256": "9bdde34b83ceaf074e11dac083229296897d738aa8de091dd6f62487497087ac",
+          "selection_axis_degrees": 302.66432141287095,
+          "selection_quantile": 0.01
         },
         {
           "class": 8,
           "variant": 1,
-          "row": 42,
-          "design_id": "15c60c286fdb1f354ffa080047a9cd0753239b5c13c5bc8b7ec8d677d0ede44d",
+          "row": 46135,
+          "design_id": "2626b16192036a1a1933965ddb9d852b89268b4970c278d03cf60e4f89f67b97",
           "file": "arrows/class-8-1.png",
-          "pixel_sha256": "2e49cb8cb65cc81291ce3b0519b82cb973c2c3980803b92685913d4c4d188822",
-          "file_sha256": "f8e4b00993a6b1c72c8e464292242fd6ee7ede8b217901f7130d55f18fc522b9"
+          "pixel_sha256": "d3a0057f7f8cbc84b9b738c34554238ea6220c6b4b8cde280df453b6665857fb",
+          "file_sha256": "4adc47f3fef1b80173f4d51f55f2db3d294203840df3d0b81df629213e37a014",
+          "selection_axis_degrees": 305.6116536674933,
+          "selection_quantile": 0.5
         },
         {
           "class": 8,
           "variant": 2,
-          "row": 52,
-          "design_id": "6cb226ae677542f352763b7e7d77bab3d3de4d5fc43739ac7e086e2b0ddaa81a",
+          "row": 4020,
+          "design_id": "f7585f520899e6d1c28c436c333cdb03c88b3e217c493b1d75daab98c5b13e13",
           "file": "arrows/class-8-2.png",
-          "pixel_sha256": "3454194e2daf5e398348fc4894958e97c82634354e6134297298eab14934ce27",
-          "file_sha256": "09ad7fc8aa95b2f6af43742d28d10662158575abe01efd379ac68fa2ef950d57"
+          "pixel_sha256": "5d311d21e269b3b4dd72fc79a4d79e7e50fe1436d0197acbdcb80cc32aa31db1",
+          "file_sha256": "49092f9e1868e8bee7b8d7ec78bf01ef9b9648abbd7d9f2c16a21e235cbe9058",
+          "selection_axis_degrees": 308.48420099686183,
+          "selection_quantile": 0.99
         },
         {
           "class": 9,
           "variant": 0,
-          "row": 5,
-          "design_id": "338e3c628b1d15ae66322e1925ae7c7dfcbd5ca035b3fc171921fd92cc0a76a1",
+          "row": 27801,
+          "design_id": "57262ac2bc89b5a49952dbd2fc89743a1cf6b7e21b2e5da884f9049bcb1f9164",
           "file": "arrows/class-9-0.png",
-          "pixel_sha256": "225960c861ab55e70d1cb406d1c5bd94bd6c88b3135bd06a2367997fff9f417d",
-          "file_sha256": "70fd1101c91e34c986f2091eb3d6ea19590ceaf301c633c64f62bf209d4b52e6"
+          "pixel_sha256": "592bb17f3249c49d8ca00d043bb82826e04e497786552c4549dcd11b15a96df2",
+          "file_sha256": "3698110c8a4f738387cda40be809a3111d3dbbfe189cc0bb4b69f73ac1994ca4",
+          "selection_axis_degrees": 338.8729751681243,
+          "selection_quantile": 0.01
         },
         {
           "class": 9,
           "variant": 1,
-          "row": 19,
-          "design_id": "4b830134f4f036fe899e091edf07d1b2c89439121fdf41e8429944c4687853ae",
+          "row": 36623,
+          "design_id": "9fa1440154f1c50359a7a8646a342db583ecd768d79cbffa86bb4037bda28c3a",
           "file": "arrows/class-9-1.png",
-          "pixel_sha256": "71f42764c21b8c1ecd80899f5c467d36b36a235863fd37c0efbd9fbb2b5bc92b",
-          "file_sha256": "22f3188a5eeab28dad84653207c333d5279fc58f5d6a9e9ba2a533328bb6a56a"
+          "pixel_sha256": "225db9471e8ebae64b33b8b149bdba41da1c18e0f7353170134e4e293e2784d0",
+          "file_sha256": "a2810dba903c5e39c7c891da2f5345d1df21cf5deb7132a23b533a09aab74910",
+          "selection_axis_degrees": 341.8871066307762,
+          "selection_quantile": 0.5
         },
         {
           "class": 9,
           "variant": 2,
-          "row": 20,
-          "design_id": "2eca4f0ca3415ba5987ed431350759a4c69821d0076ce1e3b85dc3119101fb5d",
+          "row": 26532,
+          "design_id": "0e4b57949b73e0f07e54229142b94053904fe2c23256ac7398823044aa06baf5",
           "file": "arrows/class-9-2.png",
-          "pixel_sha256": "e4a8124615e41e0dee5a984336082247cb19107462ac4dd5108f7970cf7ffb84",
-          "file_sha256": "32e0498bff8bb198a53eecd99825174222f2c79c0688ca7178f1c4eef9e86465"
+          "pixel_sha256": "a79b7a61be48587bb69849bbafe72753c911c1eaa9126f7dc86c9dd43b8f9a95",
+          "file_sha256": "7d542e01d9eebe7b957aad4dd9a90eac7b1e80ba86c5e2f97a59c793889e909e",
+          "selection_axis_degrees": 344.99191441137725,
+          "selection_quantile": 0.99
         }
+      ],
+      "display_labels": [
+        "0\u201336\u00b0 bin clockwise from up",
+        "36\u201372\u00b0 bin clockwise from up",
+        "72\u2013108\u00b0 bin clockwise from up",
+        "108\u2013144\u00b0 bin clockwise from up",
+        "144\u2013180\u00b0 bin clockwise from up",
+        "180\u2013216\u00b0 bin clockwise from up",
+        "216\u2013252\u00b0 bin clockwise from up",
+        "252\u2013288\u00b0 bin clockwise from up",
+        "288\u2013324\u00b0 bin clockwise from up",
+        "324\u2013360\u00b0 bin clockwise from up"
+      ],
+      "angle_convention": {
+        "zero_direction": "up",
+        "positive_direction": "clockwise",
+        "class_bin_width_degrees": 36,
+        "lower_bound_inclusive": true,
+        "upper_bound_exclusive": true,
+        "historical_codebook_note": "The unchanged codebook strings name bin lower bounds, not exact image angles."
+      },
+      "selection": "Foreground-axis direction quantiles 0.01,0.50,0.99 within each class, selected from unchanged archived FIT TRAIN rows; axis estimate is only a selection metric.",
+      "training_angle_offset_degrees": [
+        16,
+        20
       ]
     }
   ]
