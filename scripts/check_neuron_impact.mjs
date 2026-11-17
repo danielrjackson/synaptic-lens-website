@@ -5,6 +5,9 @@ const d=JSON.parse(fs.readFileSync(new URL('../site/assets/no-sort-example.json'
 let cases=0,questions=0;
 for(const slot of d.slots)for(const m of Object.values(slot.methods)){
  const blank=slot.methods.zero.answers;
+ const original=d.original_answers.map((x,i)=>x===d.query_pairs[i][0]+d.query_pairs[i][1]);
+ const blankCorrect=blank.map((x,i)=>x===d.query_pairs[i][0]+d.query_pairs[i][1]);
+ assert.deepEqual(summarizeImpact(d.query_pairs,d.original_answers,blank),{helped:blankCorrect.filter((x,i)=>x&&!original[i]).length,hurt:original.filter((x,i)=>x&&!blankCorrect[i]).length,net:blankCorrect.filter(Boolean).length-original.filter(Boolean).length});
  const before=blank.map((x,i)=>x===d.query_pairs[i][0]+d.query_pairs[i][1]);
  const after=m.answers.map((x,i)=>x===d.query_pairs[i][0]+d.query_pairs[i][1]);
  const fixed=after.filter((ok,i)=>ok&&!before[i]).length,broken=before.filter((ok,i)=>ok&&!after[i]).length;
