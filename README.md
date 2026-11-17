@@ -44,3 +44,5 @@ Blog posts are written from Daniel's perspective. Daniel must review and approve
 ## Migration record
 
 `migration-manifest.json` records the SHA-256 of each imported website file at software commit `2ae3fd8df7977cca668355ef4dc89cd606cdeda4`. It is an import receipt, not a lock on later edits. Additions during migration are the requested authorship disclosure and the separately verified custom-training-image gallery, with its homepage link. The gallery was reviewed at `d11baa8159276e77724ab3fc0e9ed2640f017baa` before import.
+
+Public demo naming and summaries focus on predicting missing neurons. The old demo URL redirects to `examples/neuron-completion.html`. The approved article body is preserved; its metadata and eyebrow use the same central framing.
