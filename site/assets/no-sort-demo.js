@@ -1,7 +1,9 @@
+import {confidenceSummary} from './neuron-confidence.mjs';
 import {summarizeImpact, queryImpact} from './no-sort-impact.mjs';
 const $=id=>document.getElementById(id);
 const labels={canonical:'Lens · permutation-invariant',organic:'Positional Lens · shuffled training',unaugmented:'Positional Lens · original-order training',slot_mean:'Global training average',observed_mean:'Average of visible neurons',zero:'Leave it blank'};
 const connection=i=>i<10?`Incoming · left digit ${i}`:i<20?`Incoming · right digit ${i-10}`:i===20?'Hidden neuron bias':`Outgoing · answer ${i-21}`;
+let confidence;
 let data,slot=0,method='canonical',coordinates='normalized',query=0;
 const fmt=x=>Number(x).toFixed(5);
 function element(tag,text,className){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(className)e.className=className;return e;}
@@ -35,9 +37,33 @@ function render(){
  data.query_pairs.forEach(([a,b],i)=>{const ok=m.answers[i]===a+b,button=element('button',String(m.answers[i]),ok?'':'wrong');button.type='button';button.append(element('small',ok?'✓':'×'));button.setAttribute('aria-label',`${a} plus ${b}: answer ${m.answers[i]}, ${ok?'correct':'incorrect'}`);button.setAttribute('aria-pressed',String(i===query));button.addEventListener('click',()=>{query=i;renderQuery();[...$('answer-grid').children].forEach((e,j)=>e.setAttribute('aria-pressed',String(j===query)));});$('answer-grid').append(button);});
  const blank=correct(s.methods.zero.answers),restored=correct(m.answers);
  $('variation').textContent=`Original: ${correct(data.original_answers)} correct. Blank: ${blank}. Replacement: ${restored}. The fixed and broken counts compare the replacement with the blanked network.`;
- renderQuery();
+ renderQuery(); renderConfidence();
 }
-function renderQuery(){const [a,b]=data.query_pairs[query];$('query-title').textContent=`${a} + ${b}`;$('query-truth').textContent=`Correct answer: ${a+b} · Original: ${data.original_answers[query]}`;const chosen=data.slots[slot].methods[method].answers[query],blank=data.slots[slot].methods.zero.answers[query]; $('query-stages').replaceChildren(); for(const [name,value] of [['Original',data.original_answers[query]],['Blank',blank],['Replacement',chosen]]){const r=element('div',undefined,'query-stage');r.append(element('span',name),element('strong',`${value} (${value===a+b?'correct':'incorrect'})`));$('query-stages').append(r);} $('query-blank-impact').textContent=`Original to blank: ${queryImpact(a+b,data.original_answers[query],blank)}.`; $('query-impact').textContent=`Selected replacement: ${blank} blank → ${chosen} restored. ${queryImpact(a+b,blank,chosen)}.`; $('query-methods').replaceChildren();for(const key of Object.keys(labels)){const r=element('div',undefined,'query-row'),answer=data.slots[slot].methods[key].answers[query];r.append(element('span',labels[key]),element('strong',`${answer} ${answer===a+b?'✓':'×'}`));$('query-methods').append(r);}}
+function renderQuery(){const [a,b]=data.query_pairs[query];$('query-title').textContent=`${a} + ${b}`;$('query-truth').textContent=`Correct answer: ${a+b} · Original: ${data.original_answers[query]}`;const chosen=data.slots[slot].methods[method].answers[query],blank=data.slots[slot].methods.zero.answers[query]; $('query-stages').replaceChildren(); for(const [name,value] of [['Original',data.original_answers[query]],['Blank',blank],['Replacement',chosen]]){const r=element('div',undefined,'query-stage');r.append(element('span',name),element('strong',`${value} (${value===a+b?'correct':'incorrect'})`));$('query-stages').append(r);} $('query-blank-impact').textContent=`Original to blank: ${queryImpact(a+b,data.original_answers[query],blank)}.`; $('query-impact').textContent=`Selected replacement: ${blank} blank → ${chosen} restored. ${queryImpact(a+b,blank,chosen)}.`; $('query-methods').replaceChildren();for(const key of Object.keys(labels)){const r=element('div',undefined,'query-row'),answer=data.slots[slot].methods[key].answers[query];r.append(element('span',labels[key]),element('strong',`${answer} ${answer===a+b?'✓':'×'}`));$('query-methods').append(r);} renderConfidenceQuery();}
+
+function renderConfidence(){
+ if(!confidence)return;
+ const original=confidence.original,blank=confidence.slots[slot].methods.zero,replacement=confidence.slots[slot].methods[method],truths=data.query_pairs.map(([a,b])=>a+b),summary=confidenceSummary(original,replacement,truths);
+ const pct=x=>`${(100*x).toFixed(2)}%`;
+ $('confidence-stages').replaceChildren();
+ for(const [name,stage] of [['Original',original],['Blank',blank],['Replacement',replacement]]){
+ const stats=confidenceSummary(original,stage,truths),card=element('div');card.append(element('span',name),element('strong',pct(stats.meanProbability)),element('small',`Mean NLL ${stats.meanNll.toFixed(4)}`));$('confidence-stages').append(card);
+ }
+ $('confidence-change').textContent=`Compared with the original, the replacement assigns more probability to the correct answer on ${summary.higher} questions, less on ${summary.lower}, and effectively the same on ${summary.same} (tolerance 0.000000001). Incorrect answers: ${summary.wrong}, including ${summary.broken} previously correct in the original.`;
+ renderConfidenceQuery();
+}
+function renderConfidenceQuery(){
+ if(!confidence)return;
+ const truth=data.query_pairs[query][0]+data.query_pairs[query][1],stages=[confidence.original,confidence.slots[slot].methods.zero,confidence.slots[slot].methods[method]];
+ $('confidence-query-title').textContent=`Confidence for ${data.query_pairs[query][0]} + ${data.query_pairs[query][1]} (correct answer ${truth})`;
+ $('confidence-query').replaceChildren();
+ for(let answer=0;answer<19;answer++){const row=element('tr',undefined,answer===truth?'correct-class':'');row.append(element('th',`${answer}${answer===truth?' (correct answer)':''}`));for(const stage of stages)row.append(element('td',`${(100*stage.probabilities[query][answer]).toFixed(3)}%${stage.answers[query]===answer?' [chosen]':''}`));$('confidence-query').append(row);}
+ $('confidence-query-detail').textContent=stages.map((stage,i)=>`${['Original','Blank','Replacement'][i]}: correct-answer NLL ${stage.nll[query].toFixed(4)}, logit margin ${stage.correct_margin[query].toFixed(4)}`).join('; ');
+}
+async function loadConfidence(){
+ try{const response=await fetch(new URL('./neuron-confidence.json',import.meta.url));if(!response.ok)throw Error('Confidence data unavailable');const c=await response.json();if(c.schema!=='neuron-confidence-v1'||c.source_sha256!=='3701b9fc9dfc7a1355ff0fdf514acb687a727044605c6496c8a7d7876d5d770d')throw Error('Confidence data does not match this example');confidence=c;$('confidence-loading').hidden=true;$('confidence-content').hidden=false;renderConfidence();}catch(error){$('confidence-loading').textContent='Confidence data could not load. The saved-answer walkthrough above remains available.';}
+}
+
 async function start(){
  const response=await fetch(new URL('./no-sort-example.json',import.meta.url)); if(!response.ok)throw Error('Example data could not be loaded.'); data=await response.json();
  if(data.schema!=='synaptic-lens-no-sort-example-v1'||data.slots.length!==32||data.query_pairs.length!==100)throw Error('Unexpected example data format.');
@@ -45,6 +71,6 @@ async function start(){
  $('method').addEventListener('change',e=>{method=e.target.value;render();});$('coordinates').addEventListener('change',e=>{coordinates=e.target.value;render();});
  let shuffled=false; $('shuffle').addEventListener('click',()=>{shuffled=!shuffled;const buttons=[...$('slots').children];const byId=new Map(buttons.map(b=>[Number(b.dataset.slot),b]));const order=shuffled?data.saved_permutation:Array.from({length:32},(_,i)=>i);$('slots').replaceChildren(...order.map(i=>byId.get(i)));$('shuffle').textContent=shuffled?'Restore original display order':'Shuffle the display';});
  const url=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));$('download').href=url;$('download').download='neuron-completion-example.json';
- render();$('loading').hidden=true;$('experiment').hidden=false;
+ render();$('loading').hidden=true;$('experiment').hidden=false;loadConfidence();
 }
 start().catch(error=>{$('loading').textContent=`${error.message} Serve the site over HTTP, then reload. The JSON download remains available below.`;$('loading').setAttribute('role','alert');const a=element('a',' Download example data');a.href='../assets/no-sort-example.json';$('loading').append(a);});
