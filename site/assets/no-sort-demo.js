@@ -1,5 +1,5 @@
-import {confidenceSummary} from './neuron-confidence.mjs';
-import {summarizeImpact, queryImpact} from './no-sort-impact.mjs';
+import {confidenceSummary} from './neuron-confidence.mjs?v=neuron-confidence-2';
+import {summarizeImpact, queryImpact} from './no-sort-impact.mjs?v=neuron-confidence-2';
 const $=id=>document.getElementById(id);
 const labels={canonical:'Lens · permutation-invariant',organic:'Positional Lens · shuffled training',unaugmented:'Positional Lens · original-order training',slot_mean:'Global training average',observed_mean:'Average of visible neurons',zero:'Leave it blank'};
 const connection=i=>i<10?`Incoming · left digit ${i}`:i<20?`Incoming · right digit ${i-10}`:i===20?'Hidden neuron bias':`Outgoing · answer ${i-21}`;
@@ -61,7 +61,7 @@ function renderConfidenceQuery(){
  $('confidence-query-detail').textContent=stages.map((stage,i)=>`${['Original','Blank','Replacement'][i]}: correct-answer NLL ${stage.nll[query].toFixed(4)}, logit margin ${stage.correct_margin[query].toFixed(4)}`).join('; ');
 }
 async function loadConfidence(){
- try{const response=await fetch(new URL('./neuron-confidence.json',import.meta.url));if(!response.ok)throw Error('Confidence data unavailable');const c=await response.json();if(c.schema!=='neuron-confidence-v1'||c.source_sha256!=='3701b9fc9dfc7a1355ff0fdf514acb687a727044605c6496c8a7d7876d5d770d')throw Error('Confidence data does not match this example');confidence=c;$('confidence-loading').hidden=true;$('confidence-content').hidden=false;renderConfidence();}catch(error){$('confidence-loading').textContent='Confidence data could not load. The saved-answer walkthrough above remains available.';}
+ try{const response=await fetch(new URL('./neuron-confidence.json?v=9982762cb9c6',import.meta.url),{signal:AbortSignal.timeout(30000)});if(!response.ok)throw Error('Confidence data unavailable');const c=await response.json();if(c.schema!=='neuron-confidence-v1'||c.source_sha256!=='3701b9fc9dfc7a1355ff0fdf514acb687a727044605c6496c8a7d7876d5d770d')throw Error('Confidence data does not match this example');confidence=c;$('confidence-loading').hidden=true;$('confidence-content').hidden=false;renderConfidence();}catch(error){$('confidence-loading').textContent='Confidence data could not load. The saved-answer walkthrough above remains available.';}
 }
 
 async function start(){
