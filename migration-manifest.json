@@ -1,0 +1,25 @@
+{
+  "source_repository": "danielrjackson/synaptic-lens",
+  "source_commit": "2ae3fd8df7977cca668355ef4dc89cd606cdeda4",
+  "source_directory": "docs",
+  "sha256": {
+    ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "index.html": "26bf10a3a4b9cc2b024bc266407dade3113a939b578fa510a9af1151c6c44856",
+    "assets/adder-lens-workflow.png": "68b8a6c040e49e249d97c44f0d13c2c4c035c9286532e36832103afcc49c3390",
+    "assets/mnist-statistics-workflow.png": "178547c5a65c05d2ba5acb45118f90a09838d552d88f473a30adfd37ece4d61e",
+    "assets/no-sort-demo.css": "28725c92a55db2f481428d9c89d3931617c38ac7fc17b747dd940fdfaaddf984",
+    "assets/no-sort-demo.js": "9aab3072758a7edfc45275df55b89c3da080f08ba59c5846f5058f58f67c7011",
+    "assets/no-sort-example.json": "3701b9fc9dfc7a1355ff0fdf514acb687a727044605c6496c8a7d7876d5d770d",
+    "assets/no-sort-impact.mjs": "cd7b1c02fd4f9492bba142f36a1532aff74ee9f630f0db7b4e6ffa6731b32996",
+    "assets/site.css": "073e1c0c2c0abffc99cb66d49ff2e123ebff5e00e1463d312803f29289b738e3",
+    "assets/synaptic-lens-dark-green-brain-logo.png": "ffbb46bc91caba9d0651a71fc7083aef1b6dc72df21ea5e00d071019d86ad252",
+    "blog/blog.css": "e18a00ad9005d612282bf71e2e3371b904e167ba9241a606684920150fff7337",
+    "blog/filling-in-a-neuron.html": "f37f0d8cf9a15809e26e7af91aad61e0d9226c894785f2843c3f6ef9f00e7822",
+    "blog/index.html": "e3ee8da5d9635fe698ae3c5ebb5c1ec455e0f3ee202eb06b8e61cce2066f0f15",
+    "blog/reading-an-adder.html": "08cce17fa6cc0954fe8bed6ae57599c67c321ac5f6ddcd00f8348b1126581227",
+    "examples/no-sort-neuron.html": "2a771e2a37ae3cf1f7b05fae87763d52aa86aa395f43577f26ae1c3420176e46",
+    "assets/no-sort/no-sort-final-comparison.svg": "f17f0f39353374801ff0d1f82b4f502fbdd6242f4f38b73dac4d34456d86549b",
+    "assets/no-sort/no-sort-order-robustness.svg": "b968584ec73e9918f961a495a9ce2ffb147f5619f601ce3eeb08991016719883",
+    "assets/no-sort/no-sort-training-progress.svg": "87b3d84e047a639ad3d3ede679248bad1cceb3b7a0763d7bd8f0a5132f86236d"
+  }
+}
