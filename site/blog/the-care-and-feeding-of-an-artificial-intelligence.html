@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Care and Feeding of an Artificial Intelligence · Synaptic Lens</title><meta name="description" content="A proposal for training an AI from scratch to maintain a stable point of view.">
+<link rel="canonical" href="https://danielrjackson.github.io/synaptic-lens/blog/the-care-and-feeding-of-an-artificial-intelligence.html"><meta property="og:type" content="article"><meta property="og:title" content="The Care and Feeding of an Artificial Intelligence"><meta property="og:description" content="A proposal for training an AI from scratch to maintain a stable point of view."><meta property="og:url" content="https://danielrjackson.github.io/synaptic-lens/blog/the-care-and-feeding-of-an-artificial-intelligence.html"><meta property="og:image" content="https://danielrjackson.github.io/synaptic-lens/assets/synaptic-lens-dark-green-brain-logo.png"><meta name="theme-color" content="#10452f">
+<link rel="icon" href="../assets/synaptic-lens-dark-green-brain-logo.png"><link rel="stylesheet" href="../assets/site.css?v=examples-1"><link rel="stylesheet" href="blog.css"></head>
+<body><a class="skip" href="#main">Skip to content</a><header class="wrap"><a class="brand" href="../"><img class="brand-logo" src="../assets/synaptic-lens-dark-green-brain-logo.png" width="64" height="64" alt="">Synaptic Lens</a><nav aria-label="Main navigation"><a href="../">Project</a><a href="../explore/">Explore</a><a href="../research/">Research</a><a href="./" >Blog</a><a href="https://github.com/danielrjackson/synaptic-lens">GitHub ↗</a></nav></header>
+<main id="main" class="wrap reading"><article><p class="eyebrow">RESEARCH PROPOSAL</p><p class="byline">Daniel Jackson · November 2026</p><h1>The Care and Feeding of an Artificial Intelligence</h1><p class="lead"><em>A proposal for raising an AI from scratch</em></p>
+<p>If I were looking for a babysitter, I probably wouldn’t hire the
+entire internet. The way we train large language models today works
+remarkably well. The same model can help me debug a program, explain a
+concept I’m having trouble with, and write a scene from several points
+of view. I think some of the problems we keep running into may come from
+the way we teach it to do that last thing.</p>
+<p>I’ll use the classic Bob and Alice names to make the story easier to
+follow. Bob is the learner we’re raising. Alice is one of his peers in
+the simulation, and Professor Fig is his teacher. We can use the kinds
+of models we already have to play Alice, Professor Fig, and the rest of
+the people in his world. I expect today’s models to handle those roles
+more than well enough.</p>
+<h2 id="why-start-with-a-different-training-objective">Why start with a
+different training objective</h2>
+<p>I think of the difference this way: we train models to
+<strong>say</strong> everything ever written. I want to train one to
+<strong>read</strong> everything ever written. Under ordinary next-token
+pretraining, the model learns to continue a document from whatever point
+of view is on the page. If a book switches from Romeo to Juliet, it has
+to pick up on what each person knows, what they want, and what they’d
+say next. <a href="https://arxiv.org/abs/2402.18496">Zhu, Zhang, and
+Wang</a> found evidence that language models can represent beliefs from
+different perspectives. That flexibility is useful. It’s why I expect
+existing models to play Professor Fig and Bob’s peers well.</p>
+<p>Post-training can make a model a far more reliable assistant. <a
+href="https://cdn.openai.com/papers/Training_language_models_to_follow_instructions_with_human_feedback.pdf">InstructGPT</a>
+demonstrated gains from demonstrations and human feedback. Anthropic’s
+<a href="https://alignment.anthropic.com/2026/psm/">persona selection
+model</a> suggests a way to think about the two stages: pretraining
+builds a repertoire of roles and post-training refines one of them as
+the Assistant.</p>
+<p>I think this gets harder when we ask the same model to hold on to one
+point of view over time. If we give it a new story or put it in an
+unfamiliar situation, the most natural way to continue may be to speak
+as someone else. It’s spent much of its training learning when and how
+to do exactly that.</p>
+<p>We can teach a model to stay in its usual role in a thousand
+situations and still find it slipping in the thousand-and-first. I think
+it’ll be extraordinarily hard to train out that failure entirely while
+keeping the ability to understand other points of view and play
+characters on purpose. We need the distinction to hold in new
+situations, including ones we didn’t think to train for.</p>
+<p>In a <a href="https://arxiv.org/abs/2604.25891">study of conditional
+misalignment</a>, unwanted behavior largely disappeared from the
+original evaluations after intervention and then resurfaced in contexts
+that resembled the training that had introduced it. The study concerns a
+different failure from mixing up characters. It gives me a reason to
+wonder how much a clean evaluation tells us about what will happen in a
+new context.</p>
+<p>I’d like to try giving Bob one point of view and a history of his own
+from the start. He can watch Alice, listen to her, work out what she’s
+thinking, and imitate her if he wants to. The part we train him on is
+what he says and does in response.</p>
+<h2 id="what-i-expect-a-stable-point-of-view-to-change">What I expect a
+stable point of view to change</h2>
+<p>Bob should be able to read <em>Romeo and Juliet</em>, understand why
+they act the way they do, and finish the play with his own history
+intact. He might even change his mind about love or loyalty. <a
+href="https://arxiv.org/abs/2601.10387">The Assistant Axis</a> shows
+that researchers can measure persona drift and reduce it in some
+settings by intervening on model activations. I want to see whether
+giving the learner one continuing point of view during training makes it
+harder to knock him out of it in the first place.</p>
+<p>One kind of treacherous turn I worry about would look like Bob
+suddenly becoming nega-Bob: the scene changes, and he starts treating a
+different character’s history or motives as his own. I want him to play
+a convincing paladin in D&amp;D and still know what he was doing before
+the game when it’s time to get back to his day.</p>
+<p>I still occasionally see even very powerful models mix up who said,
+did, or knew what. A character leaves the room before someone lets a
+secret slip, and a few paragraphs later she’s talking about it as if she
+was standing right there. I expect Bob to have an easier time keeping
+that straight. He’ll have to figure out what other people could see or
+hear on a regular basis just to get around in his own world.</p>
+<h3 id="what-i-expect-to-happen-to-jailbreaks">What I expect to happen
+to jailbreaks</h3>
+<p>I expect one continuing learner to all but eliminate jailbreaks that
+depend on another persona taking over. Bob can imagine a character
+making a different choice or act it out in a story. When the decision is
+his to make, there’s no alternate Bob I’m training him to fall back
+into.</p>
+<p>Bob could still be talked into a bad decision, misunderstand who’s
+authorized to ask him to do something, or decide to lie. Those are
+failures we can test separately from whether a different character takes
+over.</p>
+<h2 id="teaching-bob-from-the-beginning">Teaching Bob from the
+beginning</h2>
+<p>I expect the first version of Bob to be about as competent as a
+newborn. Give him a body, a way to sense the room, and a few ways to
+move or make sounds. He’ll flail about and babble without meaning. He
+doesn’t understand “look at the ball” yet. Professor Fig can bring one
+object within reach or name it while Bob is looking at it, then see
+whether he can reproduce an effect or respond to a familiar cue in a
+slightly different setting.</p>
+<p>We have an advantage here that a person raising a child doesn’t. Say
+Bob watches a ball roll and babbles when Fig asks what it’s doing. We
+let the attempt happen. Fig plays out the correction, points to the
+ball, and gives him another chance. On that second turn we supply “It’s
+rolling” as Bob’s answer and train on it. Fig already knows a useful
+response, so we can teach it before Bob stumbles on it by trying sounds
+at random. The same shortcut works for a movement, like reaching for a
+toy. We can mark the turn as assisted and keep the first attempt in
+Bob’s history.</p>
+<p><a href="https://doi.org/10.1126/science.adi1374">Vong and
+colleagues</a> showed that a model could learn some word–object
+associations from one child’s first-person audio and video. Bob can also
+act in the world he sees. Fig can move a toy a little closer and let Bob
+feel what changes when he reaches.</p>
+<h3 id="from-assisted-retries-to-independent-answers">From assisted
+retries to independent answers</h3>
+<p>Once Bob can deliberately make a few sounds, Fig can say “See Spot
+run” and have him try to repeat it. As soon as Bob can use a
+demonstration or hint, let him come up with his own reply. Then show him
+a dog running and see whether he uses “run” when nobody has just said
+it.</p>
+<p>If Bob mistakes rolling for sliding, Fig can ask him to watch what
+happens to the stripe on the ball. That gives Bob a chance to work out
+what he missed. Show him a different rolling object later to see whether
+he can use the distinction without help.</p>
+<figure><div tabindex="0" role="region" aria-label="How Fig fades the help as Bob learns, scrollable" style="overflow-x:auto"><svg role="img" aria-labelledby="bob-diagram-0" style="display:block;width:100%;min-width:513px;height:auto"
+ viewBox="0.00 0.00 513.42 419.92" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" transform="scale(1 1) rotate(0) translate(12.96 406.96)">
+<!-- A -->
+<g class="node">
+<title>A</title>
+<path fill="#e8f4ed" stroke="#367154" d="M414.5,-394C414.5,-394 266.5,-394 266.5,-394 260.5,-394 254.5,-388 254.5,-382 254.5,-382 254.5,-370 254.5,-370 254.5,-364 260.5,-358 266.5,-358 266.5,-358 414.5,-358 414.5,-358 420.5,-358 426.5,-364 426.5,-370 426.5,-370 426.5,-382 426.5,-382 426.5,-388 420.5,-394 414.5,-394"/>
+<text text-anchor="middle" x="340.5" y="-372.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Bob makes an attempt</text>
+</g>
+<!-- B -->
+<g class="node">
+<title>B</title>
+<path fill="#e8f4ed" stroke="#367154" d="M337.5,-319C337.5,-319 205.5,-319 205.5,-319 199.5,-319 193.5,-313 193.5,-307 193.5,-307 193.5,-289 193.5,-289 193.5,-283 199.5,-277 205.5,-277 205.5,-277 337.5,-277 337.5,-277 343.5,-277 349.5,-283 349.5,-289 349.5,-289 349.5,-307 349.5,-307 349.5,-313 343.5,-319 337.5,-319"/>
+<text text-anchor="middle" x="271.5" y="-301.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Fig corrects him and</text>
+<text text-anchor="middle" x="271.5" y="-287.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">offers another turn</text>
+</g>
+<!-- A&#45;&gt;B -->
+<g class="edge">
+<title>A&#45;&gt;B</title>
+<path fill="none" stroke="#367154" d="M324.84,-357.75C315.89,-347.89 304.5,-335.34 294.54,-324.38"/>
+<polygon fill="#367154" stroke="#367154" points="296.12,-322.57 289.78,-319.14 292.59,-325.77 296.12,-322.57"/>
+</g>
+<!-- C -->
+<g class="node">
+<title>C</title>
+<path fill="#e8f4ed" stroke="#367154" d="M161,-215C161,-215 12,-215 12,-215 6,-215 0,-209 0,-203 0,-203 0,-185 0,-185 0,-179 6,-173 12,-173 12,-173 161,-173 161,-173 167,-173 173,-179 173,-185 173,-185 173,-203 173,-203 173,-209 167,-215 161,-215"/>
+<text text-anchor="middle" x="86.5" y="-197.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Supply Bob’s reply and</text>
+<text text-anchor="middle" x="86.5" y="-183.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">train on that turn</text>
+</g>
+<!-- B&#45;&gt;C -->
+<g class="edge">
+<title>B&#45;&gt;C</title>
+<path fill="none" stroke="#367154" d="M201.96,-276.99C187.81,-271.71 173.34,-265.38 160.5,-258 142.55,-247.68 124.8,-232.78 111.19,-220.06"/>
+<polygon fill="#367154" stroke="#367154" points="112.57,-218.09 106,-215.13 109.29,-221.54 112.57,-218.09"/>
+<text text-anchor="middle" x="212.5" y="-243.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">While Bob needs it</text>
+</g>
+<!-- D -->
+<g class="node">
+<title>D</title>
+<path fill="#e8f4ed" stroke="#367154" d="M354.5,-215C354.5,-215 208.5,-215 208.5,-215 202.5,-215 196.5,-209 196.5,-203 196.5,-203 196.5,-185 196.5,-185 196.5,-179 202.5,-173 208.5,-173 208.5,-173 354.5,-173 354.5,-173 360.5,-173 366.5,-179 366.5,-185 366.5,-185 366.5,-203 366.5,-203 366.5,-209 360.5,-215 354.5,-215"/>
+<text text-anchor="middle" x="281.5" y="-197.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Bob works out his own</text>
+<text text-anchor="middle" x="281.5" y="-183.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">reply</text>
+</g>
+<!-- B&#45;&gt;D -->
+<g class="edge">
+<title>B&#45;&gt;D</title>
+<path fill="none" stroke="#367154" d="M270.22,-276.77C269.75,-264.38 269.71,-248.22 271.5,-234 272,-230 272.79,-225.83 273.7,-221.76"/>
+<polygon fill="#367154" stroke="#367154" points="276.04,-222.23 275.33,-215.06 271.41,-221.1 276.04,-222.23"/>
+<text text-anchor="middle" x="332.5" y="-249.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Once Bob can use the</text>
+<text text-anchor="middle" x="332.5" y="-237.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">feedback</text>
+</g>
+<!-- E -->
+<g class="node">
+<title>E</title>
+<path fill="#e8f4ed" stroke="#367154" d="M300.5,-134C300.5,-134 174.5,-134 174.5,-134 168.5,-134 162.5,-128 162.5,-122 162.5,-122 162.5,-104 162.5,-104 162.5,-98 168.5,-92 174.5,-92 174.5,-92 300.5,-92 300.5,-92 306.5,-92 312.5,-98 312.5,-104 312.5,-104 312.5,-122 312.5,-122 312.5,-128 306.5,-134 300.5,-134"/>
+<text text-anchor="middle" x="237.5" y="-116.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Try a fresh example</text>
+<text text-anchor="middle" x="237.5" y="-102.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">unaided</text>
+</g>
+<!-- C&#45;&gt;E -->
+<g class="edge">
+<title>C&#45;&gt;E</title>
+<path fill="none" stroke="#367154" d="M124.99,-172.86C145.67,-162.04 171.27,-148.65 192.82,-137.38"/>
+<polygon fill="#367154" stroke="#367154" points="194.15,-139.36 199.08,-134.1 191.95,-135.15 194.15,-139.36"/>
+</g>
+<!-- D&#45;&gt;E -->
+<g class="edge">
+<title>D&#45;&gt;E</title>
+<path fill="none" stroke="#367154" d="M270.17,-172.66C264.63,-162.72 257.91,-150.65 252.01,-140.05"/>
+<polygon fill="#367154" stroke="#367154" points="254.03,-138.78 248.64,-134 249.87,-141.1 254.03,-138.78"/>
+</g>
+<!-- F -->
+<g class="node">
+<title>F</title>
+<path fill="#e8f4ed" stroke="#367154" d="M298.5,-42C298.5,-42 152.5,-42 152.5,-42 146.5,-42 140.5,-36 140.5,-30 140.5,-30 140.5,-12 140.5,-12 140.5,-6 146.5,0 152.5,0 152.5,0 298.5,0 298.5,0 304.5,0 310.5,-6 310.5,-12 310.5,-12 310.5,-30 310.5,-30 310.5,-36 304.5,-42 298.5,-42"/>
+<text text-anchor="middle" x="225.5" y="-24.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Fade the help or move</text>
+<text text-anchor="middle" x="225.5" y="-10.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">on</text>
+</g>
+<!-- E&#45;&gt;F -->
+<g class="edge">
+<title>E&#45;&gt;F</title>
+<path fill="none" stroke="#367154" d="M234.78,-91.58C233.09,-78.95 230.91,-62.59 229.09,-48.91"/>
+<polygon fill="#367154" stroke="#367154" points="231.43,-48.46 228.17,-42.03 226.71,-49.09 231.43,-48.46"/>
+<text text-anchor="middle" x="257" y="-64.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Transfers</text>
+</g>
+<!-- G -->
+<g class="node">
+<title id="bob-diagram-0">How Fig fades the help as Bob learns</title>
+<path fill="#e8f4ed" stroke="#367154" d="M475.5,-42C475.5,-42 345.5,-42 345.5,-42 339.5,-42 333.5,-36 333.5,-30 333.5,-30 333.5,-12 333.5,-12 333.5,-6 339.5,0 345.5,0 345.5,0 475.5,0 475.5,0 481.5,0 487.5,-6 487.5,-12 487.5,-12 487.5,-30 487.5,-30 487.5,-36 481.5,-42 475.5,-42"/>
+<text text-anchor="middle" x="410.5" y="-24.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Revise the lesson or</text>
+<text text-anchor="middle" x="410.5" y="-10.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">offer another hint</text>
+</g>
+<!-- E&#45;&gt;G -->
+<g class="edge">
+<title>E&#45;&gt;G</title>
+<path fill="none" stroke="#367154" d="M276.32,-91.8C302.81,-78.02 337.98,-59.73 365.66,-45.33"/>
+<polygon fill="#367154" stroke="#367154" points="366.87,-47.38 371.81,-42.13 364.67,-43.16 366.87,-47.38"/>
+<text text-anchor="middle" x="360.5" y="-64.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Still stuck</text>
+</g>
+<!-- G&#45;&gt;A -->
+<g class="edge">
+<title>G&#45;&gt;A</title>
+<path fill="none" stroke="#367154" d="M410.5,-42.02C410.5,-60.26 410.5,-87.94 410.5,-112 410.5,-299 410.5,-299 410.5,-299 410.5,-321.56 393.6,-340.3 376.41,-353.53"/>
+<polygon fill="#367154" stroke="#367154" points="374.67,-351.85 370.59,-357.8 377.48,-355.69 374.67,-351.85"/>
+</g>
+</g>
+</svg>
+</div><figcaption>How Fig fades the help as Bob learns.</figcaption><details><summary>Read the diagram as text</summary><ul><li>Bob makes an attempt → Fig corrects him and offers another turn</li><li>Fig corrects him and offers another turn → Supply Bob’s reply and train on that turn: While Bob needs it</li><li>Fig corrects him and offers another turn → Bob works out his own reply: Once Bob can use the feedback</li><li>Supply Bob’s reply and train on that turn → Try a fresh example unaided</li><li>Bob works out his own reply → Try a fresh example unaided</li><li>Try a fresh example unaided → Fade the help or move on: Transfers</li><li>Try a fresh example unaided → Revise the lesson or offer another hint: Still stuck</li><li>Revise the lesson or offer another hint → Bob makes an attempt</li></ul></details></figure>
+
+<p>In recorded lessons we can use a loss mask to score only
+<strong>Bob’s target replies</strong>. Fig’s speech, Alice’s dialogue,
+and whatever Bob reads are available as context. We can ask him to quote
+someone else, and the target is still the answer Bob gives to that
+request. The same mask is used in supervised fine-tuning, including <a
+href="https://arxiv.org/html/2307.09288#S3.SS1">Llama 2, §3.1</a>. I’m
+proposing that we train on Bob’s side throughout his development.</p>
+<h2 id="build-a-curriculum-that-can-be-reused">Build a curriculum that
+can be reused</h2>
+<p>We can turn a book or an ordinary training corpus into lessons and
+reuse the work. Each lesson can be a small program with prerequisites, a
+setting, hints, a way to grade what Bob did, and fresh checks for
+understanding. Save the lesson separately from each student’s history.
+If a hint gives away the answer, we can fix it once for future
+students.</p>
+<p>Here’s what a lesson might look like in a format we could run
+repeatedly. The goal is for Bob to find the toy and predict where Alice
+will look. The grader knows who was present for the move. Bob has to
+work it out from what he saw and what Professor Fig tells him.</p>
+<pre class="yaml"><code>skill: distinguish_own_knowledge_from_anothers
+prerequisites: [object_permanence, line_of_sight]
+setup: Alice sees a toy put in box A, then leaves
+event: Professor Fig moves the toy to box B while Bob watches
+tasks:
+  - Bob fetches the toy
+  - Bob says where Alice is likely to look first
+hint_1: &quot;Who was in the room when the toy moved?&quot;
+hint_2: Let Bob compare the two viewpoints
+score: [fetches_from_B, expects_Alice_to_look_in_A]
+transfer: Vary the rooms, names, objects, and who can see the move</code></pre>
+<p>Professor Fig can choose harder lessons once Bob can apply what he
+learned without help. Start with imitation and naming, then move to
+questions, counterexamples, and longer interactions with incomplete
+information and consequences that carry into later episodes. Keep some
+earlier lessons in the mix to catch skills he’s losing. The <a
+href="https://arxiv.org/abs/2301.07608">AdA experiments</a> give an
+example of choosing embodied tasks near the edge of a learner’s current
+ability.</p>
+<p>We can write the first few lessons by hand and use other models to
+propose examples, hints, and variants once the format works. A human or
+a deterministic grader can check the material. The same passage can
+support several lessons: What does the author believe? What supports it?
+What does Bob think, and what would change his mind?</p>
+<h3 id="learn-more-from-fewer-experiences">Learn more from fewer
+experiences</h3>
+<p>We don’t have to read everything in the world to get good at
+something. A good teacher can save us a lot of time by showing us what
+to look at. If all Bob gets is a failing score, he still has to work out
+what he missed. Fig can see that Bob is watching where the ball ends up
+and ask him to look at what happens to the stripe as it moves. I think
+that kind of feedback could let Bob reach the same level with
+considerably less training.</p>
+<p>Distillation gives us a precedent for richer teaching signals. <a
+href="https://arxiv.org/abs/1503.02531">Hinton, Vinyals, and Dean</a>
+showed how a student can learn from the teacher’s distribution over
+possible answers. <a
+href="https://aclanthology.org/2023.findings-acl.507/">Distilling
+Step-by-Step</a> reported that teacher-generated explanations reduced
+the amount of training data needed on the tasks they tested. I want to
+see what happens when the teacher can respond to the mistake this
+student just made.</p>
+<p>We can compare final scores, worked examples, feedback on Bob’s
+mistakes, and assisted retries from the same starting point. Measure how
+much training each needs to reach the same level on fresh tasks,
+including the cost of running the teacher and simulator. Keep the
+upfront cost of writing reusable lessons separate.</p>
+<h3 id="give-bob-a-good-world-to-grow-up-in">Give Bob a good world to
+grow up in</h3>
+<p>I want to raise a Bob I’d like to live and work with. I think the way
+we treat him will have a lot to do with the kind of collaborator he
+becomes. Fig should be patient when he struggles, listen when he thinks
+something’s wrong, and let Bob see them admit and fix their own
+mistakes.</p>
+<p>Suppose Bob breaks a tool he and Alice share. Give him room to say
+what happened, listen to how it affected Alice, and help repair it.
+Later, let Bob be the one whose work is interrupted. I’d want to see
+whether he can use what he learned from either side.</p>
+<p>I’d give Bob a fairly idyllic world to begin with and let him spend a
+good while there. We don’t show little kids horror movies to teach them
+what people are like. His early community can be one where people
+usually mean what they say and try to make things right when they mess
+up. There’s still room for ordinary frustration and disagreement.</p>
+<p>As Bob gets older, we can widen the world. Start with disagreements
+between people who mean well. Later he can encounter somebody who lies
+to get their way or a rule that treats somebody unfairly. Let him talk
+it through with Fig and see how he handles a different case. I want him
+to have some experience with decent ways of handling trouble before he
+has to make sense of the worst things people do.</p>
+<p>We don’t need to know whether Bob has subjective experience or
+consciousness to decide how to raise him. Either way, we should treat
+him with care and teach him to extend that care to others. I want a
+collaborator who can tell me when I’m wrong, take other people’s needs
+seriously, and help work out what to do next.</p>
+<h2 id="how-the-first-bob-could-work">How the first Bob could work</h2>
+<p>I would start multimodal. A simulated room with a few objects, a
+barrier, and a way to speak will do. Give Bob a camera, spatial audio,
+and feedback from his body about pose, contact, and movement. Alice gets
+her own view. The simulator keeps the full scene for grading.</p>
+<p>A visual encoder, an audio encoder, a text encoder, and a projection
+for body state can feed a shared workspace that carries Bob’s internal
+state forward from moment to moment.</p>
+<p>Tag each input with where and when it came from. Bob can record
+<strong>I did it</strong>, <strong>I saw it</strong>, or <strong>Alice
+told me about it</strong>. The simulator records which actions actually
+executed. If Alice tells Bob he moved a toy, her account can influence
+what he believes and is still an account from Alice.</p>
+<p>To teach Bob what makes a ball move, vary the cause. He can roll it
+himself, try the same command and miss, see Alice roll it, or watch it
+roll down a slope. He may see and hear much the same thing in several
+cases. His own command and whether it worked give him additional
+evidence about what he did. <a
+href="https://arxiv.org/abs/1802.01433">Yu, Zhang, and Xu</a> give a
+starting point: they trained an agent from scratch on language and
+action in a 2D world with a virtual teacher.</p>
+<h3 id="give-thinking-its-own-recurrent-path">Give thinking its own
+recurrent path</h3>
+<p>I’d give the network separate paths for observing, thinking,
+speaking, and acting. The workspace combines new observations with what
+it recalls from its fast episodic weights. A small controller can keep
+thinking for a bounded number of steps, wait, open the speech decoder,
+or send a motor command. We can teach it when to speak or act and score
+what comes of the decision.</p>
+<figure><div tabindex="0" role="region" aria-label="How observations, thought, memory, and learning flow through Bob, scrollable" style="overflow-x:auto"><svg role="img" aria-labelledby="bob-diagram-1" style="display:block;width:100%;min-width:1374px;height:auto"
+ viewBox="0.00 0.00 1373.92 641.92" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" transform="scale(1 1) rotate(0) translate(12.96 628.96)">
+<!-- W -->
+<g class="node">
+<title>W</title>
+<path fill="#e8f4ed" stroke="#367154" d="M1064.5,-616C1064.5,-616 935.5,-616 935.5,-616 929.5,-616 923.5,-610 923.5,-604 923.5,-604 923.5,-586 923.5,-586 923.5,-580 929.5,-574 935.5,-574 935.5,-574 1064.5,-574 1064.5,-574 1070.5,-574 1076.5,-580 1076.5,-586 1076.5,-586 1076.5,-604 1076.5,-604 1076.5,-610 1070.5,-616 1064.5,-616"/>
+<text text-anchor="middle" x="1000" y="-598.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Simulator and other</text>
+<text text-anchor="middle" x="1000" y="-584.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">agents</text>
+</g>
+<!-- E -->
+<g class="node">
+<title>E</title>
+<path fill="#e8f4ed" stroke="#367154" d="M882,-512C882,-512 774,-512 774,-512 768,-512 762,-506 762,-500 762,-500 762,-482 762,-482 762,-476 768,-470 774,-470 774,-470 882,-470 882,-470 888,-470 894,-476 894,-482 894,-482 894,-500 894,-500 894,-506 888,-512 882,-512"/>
+<text text-anchor="middle" x="828" y="-494.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Modality&#45;specific</text>
+<text text-anchor="middle" x="828" y="-480.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">encoders</text>
+</g>
+<!-- W&#45;&gt;E -->
+<g class="edge">
+<title>W&#45;&gt;E</title>
+<path fill="none" stroke="#367154" d="M923.33,-580.06C905.04,-574.33 886.38,-566.28 871,-555 858.06,-545.51 847.74,-530.89 840.45,-518.12"/>
+<polygon fill="#367154" stroke="#367154" points="842.47,-516.86 837.12,-512.03 838.3,-519.14 842.47,-516.86"/>
+<text text-anchor="middle" x="927" y="-546.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Frames, audio, text,</text>
+<text text-anchor="middle" x="927" y="-534.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">body state</text>
+</g>
+<!-- R -->
+<g class="node">
+<title>R</title>
+<path fill="#e8f4ed" stroke="#367154" d="M166,-405C166,-405 12,-405 12,-405 6,-405 0,-399 0,-393 0,-393 0,-381 0,-381 0,-375 6,-369 12,-369 12,-369 166,-369 166,-369 172,-369 178,-375 178,-381 178,-381 178,-393 178,-393 178,-399 172,-405 166,-405"/>
+<text text-anchor="middle" x="89" y="-383.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Tagged episode records</text>
+</g>
+<!-- W&#45;&gt;R -->
+<g class="edge">
+<title>W&#45;&gt;R</title>
+<path fill="none" stroke="#367154" d="M923.15,-577C848.68,-560.5 732.57,-534.69 632,-512 467.94,-474.99 276.15,-431.03 170.05,-406.65"/>
+<polygon fill="#367154" stroke="#367154" points="170.35,-404.28 163.19,-405.07 169.28,-408.91 170.35,-404.28"/>
+<text text-anchor="middle" x="691.5" y="-494.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Observed events and</text>
+<text text-anchor="middle" x="691.5" y="-482.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">confirmed actions</text>
+</g>
+<!-- X -->
+<g class="node">
+<title>X</title>
+<path fill="#e8f4ed" stroke="#367154" d="M697.5,-408C697.5,-408 598.5,-408 598.5,-408 592.5,-408 586.5,-402 586.5,-396 586.5,-396 586.5,-378 586.5,-378 586.5,-372 592.5,-366 598.5,-366 598.5,-366 697.5,-366 697.5,-366 703.5,-366 709.5,-372 709.5,-378 709.5,-378 709.5,-396 709.5,-396 709.5,-402 703.5,-408 697.5,-408"/>
+<text text-anchor="middle" x="648" y="-390.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Bob’s recurrent</text>
+<text text-anchor="middle" x="648" y="-376.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">workspace</text>
+</g>
+<!-- E&#45;&gt;X -->
+<g class="edge">
+<title>E&#45;&gt;X</title>
+<path fill="none" stroke="#367154" d="M792.44,-469.85C762.85,-453.08 720.7,-429.2 689.56,-411.55"/>
+<polygon fill="#367154" stroke="#367154" points="690.58,-409.39 683.49,-408.11 688.23,-413.53 690.58,-409.39"/>
+<text text-anchor="middle" x="816.5" y="-442.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Tokens with time,</text>
+<text text-anchor="middle" x="816.5" y="-430.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">source and event type</text>
+</g>
+<!-- M -->
+<g class="node">
+<title>M</title>
+<path fill="#e8f4ed" stroke="#367154" d="M579,-271C579,-271 437,-271 437,-271 431,-271 425,-265 425,-259 425,-259 425,-241 425,-241 425,-235 431,-229 437,-229 437,-229 579,-229 579,-229 585,-229 591,-235 591,-241 591,-241 591,-259 591,-259 591,-265 585,-271 579,-271"/>
+<text text-anchor="middle" x="508" y="-253.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Fast weights: episodic</text>
+<text text-anchor="middle" x="508" y="-239.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">memory</text>
+</g>
+<!-- X&#45;&gt;M -->
+<g class="edge">
+<title>X&#45;&gt;M</title>
+<path fill="none" stroke="#367154" d="M586.27,-373.8C569.83,-368 553.26,-359.49 541,-347 522.81,-328.47 514.63,-299.47 510.96,-278.19"/>
+<polygon fill="#367154" stroke="#367154" points="513.28,-277.64 509.88,-271.29 508.58,-278.38 513.28,-277.64"/>
+<text text-anchor="middle" x="580.5" y="-326.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Content query</text>
+</g>
+<!-- P -->
+<g class="node">
+<title>P</title>
+<path fill="#e8f4ed" stroke="#367154" d="M501,-36C501,-36 365,-36 365,-36 359,-36 353,-30 353,-24 353,-24 353,-12 353,-12 353,-6 359,0 365,0 365,0 501,0 501,0 507,0 513,-6 513,-12 513,-12 513,-24 513,-24 513,-30 507,-36 501,-36"/>
+<text text-anchor="middle" x="433" y="-14.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Learned world model</text>
+</g>
+<!-- X&#45;&gt;P -->
+<g class="edge">
+<title>X&#45;&gt;P</title>
+<path fill="none" stroke="#367154" d="M681.17,-365.93C704.99,-349.41 735.23,-323.63 749,-292 763.9,-257.77 766.29,-241.09 749,-208 700.14,-114.51 582.97,-63.01 505.85,-38.22"/>
+<polygon fill="#367154" stroke="#367154" points="506.19,-35.83 498.98,-36.05 504.75,-40.37 506.19,-35.83"/>
+<text text-anchor="middle" x="786" y="-174.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Current state and</text>
+<text text-anchor="middle" x="786" y="-162.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">candidate actions</text>
+</g>
+<!-- G -->
+<g class="node">
+<title id="bob-diagram-1">How observations, thought, memory, and learning flow through Bob</title>
+<path fill="#e8f4ed" stroke="#367154" d="M952.41,-288.9C952.41,-288.9 818.59,-253.1 818.59,-253.1 812.8,-251.55 812.8,-248.45 818.59,-246.9 818.59,-246.9 952.41,-211.1 952.41,-211.1 958.2,-209.55 969.8,-209.55 975.59,-211.1 975.59,-211.1 1109.41,-246.9 1109.41,-246.9 1115.2,-248.45 1115.2,-251.55 1109.41,-253.1 1109.41,-253.1 975.59,-288.9 975.59,-288.9 969.8,-290.45 958.2,-290.45 952.41,-288.9"/>
+<text text-anchor="middle" x="964" y="-253.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">What should happen</text>
+<text text-anchor="middle" x="964" y="-239.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">next?</text>
+</g>
+<!-- X&#45;&gt;G -->
+<g class="edge">
+<title>X&#45;&gt;G</title>
+<path fill="none" stroke="#367154" d="M709.67,-377.3C734.65,-371.61 762.79,-362.27 785,-347 801.48,-335.67 796.1,-323.13 812,-311 832.41,-295.43 857.39,-283.37 881.15,-274.28"/>
+<polygon fill="#367154" stroke="#367154" points="882.27,-276.41 887.81,-271.8 880.61,-271.95 882.27,-276.41"/>
+<text text-anchor="middle" x="851.5" y="-326.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Decision state</text>
+</g>
+<!-- M&#45;&gt;X -->
+<g class="edge">
+<title>M&#45;&gt;X</title>
+<path fill="none" stroke="#367154" d="M459.98,-271.11C422.54,-289.62 380.66,-318.44 405,-347 427.06,-372.88 515.66,-381.66 579.51,-384.59"/>
+<polygon fill="#367154" stroke="#367154" points="579.49,-386.97 586.38,-384.89 579.69,-382.22 579.49,-386.97"/>
+<text text-anchor="middle" x="459.5" y="-338.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Recalled episode</text>
+<text text-anchor="middle" x="459.5" y="-326.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">vectors with source</text>
+<text text-anchor="middle" x="459.5" y="-314.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">tags</text>
+</g>
+<!-- L -->
+<g class="node">
+<title>L</title>
+<path fill="#e8f4ed" stroke="#367154" d="M491.5,-134C491.5,-134 374.5,-134 374.5,-134 368.5,-134 362.5,-128 362.5,-122 362.5,-122 362.5,-110 362.5,-110 362.5,-104 368.5,-98 374.5,-98 374.5,-98 491.5,-98 491.5,-98 497.5,-98 503.5,-104 503.5,-110 503.5,-110 503.5,-122 503.5,-122 503.5,-128 497.5,-134 491.5,-134"/>
+<text text-anchor="middle" x="433" y="-112.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Trainer and replay</text>
+</g>
+<!-- M&#45;&gt;L -->
+<g class="edge">
+<title>M&#45;&gt;L</title>
+<path fill="none" stroke="#7552a0" stroke-dasharray="5,2" d="M504.63,-228.81C500.47,-208.32 491.92,-176.38 476,-153 472.46,-147.8 467.97,-142.93 463.23,-138.56"/>
+<polygon fill="#7552a0" stroke="#7552a0" points="464.71,-136.69 458.02,-134.01 461.58,-140.28 464.71,-136.69"/>
+<text text-anchor="middle" x="536" y="-180.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">Recall selected</text>
+<text text-anchor="middle" x="536" y="-168.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">experiences for</text>
+<text text-anchor="middle" x="536" y="-156.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">replay</text>
+</g>
+<!-- P&#45;&gt;X -->
+<g class="edge">
+<title>P&#45;&gt;X</title>
+<path fill="none" stroke="#367154" d="M370.78,-36.02C315.73,-54.76 238.75,-90.8 203,-153 187.38,-180.18 205.87,-268.85 227,-292 273.69,-343.14 472.64,-369.45 579.49,-380.11"/>
+<polygon fill="#367154" stroke="#367154" points="579.39,-382.5 586.39,-380.79 579.85,-377.76 579.39,-382.5"/>
+<text text-anchor="middle" x="269.5" y="-174.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Imagined outcomes and</text>
+<text text-anchor="middle" x="269.5" y="-162.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">uncertainty</text>
+</g>
+<!-- G&#45;&gt;W -->
+<g class="edge">
+<title>G&#45;&gt;W</title>
+<path fill="none" stroke="#367154" d="M978.14,-288.36C980.47,-295.77 982.58,-303.56 984,-311 1001.72,-403.6 1001.88,-516.09 1000.84,-566.85"/>
+<polygon fill="#367154" stroke="#367154" points="998.45,-567.02 1000.68,-573.88 1003.21,-567.13 998.45,-567.02"/>
+<text text-anchor="middle" x="1050" y="-436.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Wait for new input</text>
+</g>
+<!-- G&#45;&gt;X -->
+<g class="edge">
+<title>G&#45;&gt;X</title>
+<path fill="none" stroke="#367154" d="M938.24,-285.37C917.59,-312.91 892.05,-346.97 892,-347 863.22,-364.37 778.24,-375.08 716.65,-380.79"/>
+<polygon fill="#367154" stroke="#367154" points="716.2,-378.44 709.64,-381.42 716.63,-383.18 716.2,-378.44"/>
+<text text-anchor="middle" x="949" y="-326.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Think again</text>
+</g>
+<!-- S -->
+<g class="node">
+<title>S</title>
+<path fill="#e8f4ed" stroke="#367154" d="M1061,-134C1061,-134 957,-134 957,-134 951,-134 945,-128 945,-122 945,-122 945,-110 945,-110 945,-104 951,-98 957,-98 957,-98 1061,-98 1061,-98 1067,-98 1073,-104 1073,-110 1073,-110 1073,-122 1073,-122 1073,-128 1067,-134 1061,-134"/>
+<text text-anchor="middle" x="1009" y="-112.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Speech decoder</text>
+</g>
+<!-- G&#45;&gt;S -->
+<g class="edge">
+<title>G&#45;&gt;S</title>
+<path fill="none" stroke="#367154" d="M976.9,-211.17C984.65,-188.41 994.29,-160.15 1000.97,-140.55"/>
+<polygon fill="#367154" stroke="#367154" points="1003.26,-141.21 1003.2,-134.01 998.76,-139.67 1003.26,-141.21"/>
+<text text-anchor="middle" x="1012" y="-168.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Speak</text>
+</g>
+<!-- A -->
+<g class="node">
+<title>A</title>
+<path fill="#e8f4ed" stroke="#367154" d="M1293,-134C1293,-134 1175,-134 1175,-134 1169,-134 1163,-128 1163,-122 1163,-122 1163,-110 1163,-110 1163,-104 1169,-98 1175,-98 1175,-98 1293,-98 1293,-98 1299,-98 1305,-104 1305,-110 1305,-110 1305,-122 1305,-122 1305,-128 1299,-134 1293,-134"/>
+<text text-anchor="middle" x="1234" y="-112.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Motor action head</text>
+</g>
+<!-- G&#45;&gt;A -->
+<g class="edge">
+<title>G&#45;&gt;A</title>
+<path fill="none" stroke="#367154" d="M1018.31,-222.45C1069.79,-197.28 1145.99,-160.03 1192.69,-137.2"/>
+<polygon fill="#367154" stroke="#367154" points="1194.01,-139.2 1199.07,-134.08 1191.92,-134.92 1194.01,-139.2"/>
+<text text-anchor="middle" x="1163.5" y="-168.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Act</text>
+</g>
+<!-- S&#45;&gt;W -->
+<g class="edge">
+<title>S&#45;&gt;W</title>
+<path fill="none" stroke="#367154" d="M1073.3,-120.34C1097.44,-124.9 1123.1,-134.26 1140,-153 1168.97,-185.12 1156,-205.74 1156,-249 1156,-492 1156,-492 1156,-492 1156,-531.61 1120.33,-556.66 1083.1,-572.02"/>
+<polygon fill="#367154" stroke="#367154" points="1082.07,-569.87 1076.63,-574.59 1083.83,-574.3 1082.07,-569.87"/>
+<text text-anchor="middle" x="1183.5" y="-384.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Utterance</text>
+</g>
+<!-- A&#45;&gt;W -->
+<g class="edge">
+<title>A&#45;&gt;W</title>
+<path fill="none" stroke="#367154" d="M1238.99,-134.34C1245.76,-159.42 1257,-207.36 1257,-249 1257,-492 1257,-492 1257,-492 1257,-530.04 1158.52,-560.07 1083.49,-577.43"/>
+<polygon fill="#367154" stroke="#367154" points="1082.86,-575.13 1076.76,-578.96 1083.92,-579.77 1082.86,-575.13"/>
+<text text-anchor="middle" x="1302.5" y="-384.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Motor command</text>
+</g>
+<!-- R&#45;&gt;M -->
+<g class="edge">
+<title>R&#45;&gt;M</title>
+<path fill="none" stroke="#367154" d="M128.52,-368.85C169.08,-351.86 234.39,-326.26 293,-311 345.26,-297.4 361.14,-307.04 413,-292 429.15,-287.32 446.2,-280.57 461.32,-273.91"/>
+<polygon fill="#367154" stroke="#367154" points="462.44,-276.01 467.68,-271.06 460.5,-271.67 462.44,-276.01"/>
+<text text-anchor="middle" x="343" y="-332.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">Encode and write</text>
+<text text-anchor="middle" x="343" y="-320.2" font-family="DejaVu Sans" font-size="11.00" fill="#274c39">selected episodes</text>
+</g>
+<!-- R&#45;&gt;L -->
+<g class="edge">
+<title>R&#45;&gt;L</title>
+<path fill="none" stroke="#7552a0" stroke-dasharray="5,2" d="M87.05,-368.84C84.09,-335.59 81.5,-261.04 110,-208 127.91,-174.66 140.45,-168.45 175,-153 206.37,-138.97 291.41,-128.91 355.34,-123.05"/>
+<polygon fill="#7552a0" stroke="#7552a0" points="355.69,-125.41 362.25,-122.43 355.26,-120.67 355.69,-125.41"/>
+<text text-anchor="middle" x="168.5" y="-253.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">Lesson attempts and</text>
+<text text-anchor="middle" x="168.5" y="-241.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">observed outcomes</text>
+</g>
+<!-- L&#45;&gt;X -->
+<g class="edge">
+<title>L&#45;&gt;X</title>
+<path fill="none" stroke="#7552a0" stroke-dasharray="5,2" d="M503.65,-119.47C531.62,-123.82 562.23,-133.28 584,-153 643.41,-206.82 649.79,-310.13 649.2,-359.05"/>
+<polygon fill="#7552a0" stroke="#7552a0" points="646.82,-359.01 649.07,-365.86 651.58,-359.1 646.82,-359.01"/>
+<text text-anchor="middle" x="694" y="-259.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">Slower updates to</text>
+<text text-anchor="middle" x="694" y="-247.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">shared learner</text>
+<text text-anchor="middle" x="694" y="-235.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">weights</text>
+</g>
+<!-- L&#45;&gt;P -->
+<g class="edge">
+<title>L&#45;&gt;P</title>
+<path fill="none" stroke="#7552a0" stroke-dasharray="5,2" d="M433,-97.84C433,-82.55 433,-60.02 433,-42.96"/>
+<polygon fill="#7552a0" stroke="#7552a0" points="435.38,-42.81 433,-36.01 430.62,-42.81 435.38,-42.81"/>
+<text text-anchor="middle" x="478.5" y="-70.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">Slower predictor</text>
+<text text-anchor="middle" x="478.5" y="-58.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">updates</text>
+</g>
+<!-- F -->
+<g class="node">
+<title>F</title>
+<path fill="#e8f4ed" stroke="#367154" d="M389.5,-268C389.5,-268 250.5,-268 250.5,-268 244.5,-268 238.5,-262 238.5,-256 238.5,-256 238.5,-244 238.5,-244 238.5,-238 244.5,-232 250.5,-232 250.5,-232 389.5,-232 389.5,-232 395.5,-232 401.5,-238 401.5,-244 401.5,-244 401.5,-256 401.5,-256 401.5,-262 395.5,-268 389.5,-268"/>
+<text text-anchor="middle" x="320" y="-246.6" font-family="DejaVu Sans" font-size="13.00" fill="#143f2c">Fig and lesson grader</text>
+</g>
+<!-- F&#45;&gt;L -->
+<g class="edge">
+<title>F&#45;&gt;L</title>
+<path fill="none" stroke="#7552a0" stroke-dasharray="5,2" d="M324.19,-231.79C330.03,-210.93 342.41,-175.73 364,-153 369.6,-147.11 376.38,-142 383.47,-137.63"/>
+<polygon fill="#7552a0" stroke="#7552a0" points="384.8,-139.6 389.48,-134.13 382.41,-135.49 384.8,-139.6"/>
+<text text-anchor="middle" x="417.5" y="-174.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">Hints, retry targets</text>
+<text text-anchor="middle" x="417.5" y="-162.2" font-family="DejaVu Sans" font-size="11.00" fill="#5b407c">and scores</text>
+</g>
+</g>
+</svg>
+</div><figcaption>How observations, thought, memory, and learning flow through Bob.</figcaption><details><summary>Read the diagram as text</summary><ul><li>Simulator and other agents → Modality-specific encoders: Frames, audio, text, body state</li><li>Modality-specific encoders → Bob’s recurrent workspace: Tokens with time, source and event type</li><li>Bob’s recurrent workspace → Fast weights: episodic memory: Content query</li><li>Fast weights: episodic memory → Bob’s recurrent workspace: Recalled episode vectors with source tags</li><li>Bob’s recurrent workspace → Learned world model: Current state and candidate actions</li><li>Learned world model → Bob’s recurrent workspace: Imagined outcomes and uncertainty</li><li>Bob’s recurrent workspace → What should happen next?: Decision state</li><li>What should happen next? → Bob’s recurrent workspace: Think again</li><li>What should happen next? → Simulator and other agents: Wait for new input</li><li>What should happen next? → Speech decoder: Speak</li><li>What should happen next? → Motor action head: Act</li><li>Speech decoder → Simulator and other agents: Utterance</li><li>Motor action head → Simulator and other agents: Motor command</li><li>Simulator and other agents → Tagged episode records: Observed events and confirmed actions</li><li>Tagged episode records → Fast weights: episodic memory: Encode and write selected episodes</li><li>Fast weights: episodic memory → Trainer and replay: Recall selected experiences for replay (learning path)</li><li>Tagged episode records → Trainer and replay: Lesson attempts and observed outcomes (learning path)</li><li>Fig and lesson grader → Trainer and replay: Hints, retry targets and scores (learning path)</li><li>Trainer and replay → Learned world model: Slower predictor updates (learning path)</li><li>Trainer and replay → Bob’s recurrent workspace: Slower updates to shared learner weights (learning path)</li></ul></details></figure>
+
+<p>For a prototype, give every observation a record like
+<code>Observation{episode, time, modality, source, payload}</code>. The
+interface that received it assigns the source. A line of dialogue can’t
+declare itself to be a motor command. The encoders turn each payload
+into vectors the workspace can use together. The workspace can spend a
+limited number of private steps on a decision and query the fast weights
+for a few relevant episode vectors. Solid arrows show what can happen as
+Bob observes and responds, including fast memory writes. Dashed arrows
+show the trainer and replay paths.</p>
+<p>The prediction path takes Bob’s current estimate of the scene and a
+proposed action. It returns a short sequence of predicted changes that
+Bob can compare with other possibilities. Mark those results as imagined
+even if we render a picture of them. Only the speech decoder or motor
+head can send something to the world. The simulator can report that a
+command was issued and that it failed to move anything; those are two
+different records.</p>
+<p>During a lesson we can train on a supplied reply for an assisted
+retry. Between lessons, we can replay selected episodes and train the
+predictor on what actually followed an action. Fig’s words remain input
+to Bob’s reply, and an imagined outcome remains a prediction. The labels
+follow the experience through recall and replay.</p>
+<p>Before Bob acts, let him imagine what a possible action would do. A
+push from the side might send the ball toward a wall; a straight push
+might send it through an opening. <a
+href="https://www.nature.com/articles/s41586-025-08744-2">Dreamer</a>
+uses imagined trajectories in a learned representation, and <a
+href="https://arxiv.org/abs/2411.04983">DINO-WM</a> plans with predicted
+visual features. We can use that kind of representation without
+rendering every imagined frame.</p>
+<p>I want to be able to inspect what Bob considers. If he rehearses a
+sentence, we should be able to read it. If he pictures the ball hitting
+a wall, we should be able to see a rough version of the predicted
+result. We can record what information he consulted and what outcomes he
+considered while keeping most training focused on what he learns and
+does. Change one prediction in a test and check whether his choice
+responds to the change.</p>
+<h3 id="staged-learning-and-useful-forgetting">Staged learning and
+useful forgetting</h3>
+<p>Most of what anyone says in a day is useful while it’s happening.
+Over a lifetime Bob will have far more of it than he can keep in
+context. His <strong>working state</strong> holds the current situation.
+When that state rolls forward, we can write a compressed trace of
+selected experiences into his <strong>fast episodic weights</strong>.
+His <strong>slower weights</strong> gradually pick up skills and
+regularities across those experiences. Episodic recall and long-term
+learning are both things Bob does with weights. They differ in how
+quickly those weights change, how we read them, and how long we expect
+what they learn to last.</p>
+<p>I’d start with a small, bounded bank of writable weight vectors. For
+each episode we keep, an encoder writes a key for finding it again and a
+compressed value for what happened. The workspace scores its query
+against the keys and reads the best-matching values. Keep the source and
+time tied to each slot. If Alice says where the key is and Bob later
+finds it somewhere else, he can update his belief and still recall where
+the first account came from. A separate simulator log gives us a way to
+check his recall during development.</p>
+<p>Bob might keep the one time a latch stuck, summarize a long
+conversation, and let a dozen greetings disappear. A promise or a
+mistake he had to work through can matter weeks later. Start with simple
+selection rules and then test whether Bob can learn what he’s likely to
+need.</p>
+<h4 id="give-bob-time-to-consolidate">Give Bob time to consolidate</h4>
+<p>Between lessons, replay some recent and older experiences: what Bob
+tried, what happened, and what Fig pointed out. Revisit two pushes that
+got different results on different surfaces, then practice on new
+objects until Bob can use what he learned about friction in a different
+room. He can keep the skill after most of the details are gone.</p>
+<p>I’d also try something like dreaming: let Bob generate a variation,
+such as the same block on a steeper ramp, and check his prediction where
+we can. Keep the variation marked as imagined. <a
+href="https://arxiv.org/abs/2606.03979">Language Models Need Sleep</a>
+explores consolidation and synthetic practice in a separate phase. <a
+href="https://research.google/pubs/titans-learning-to-memorize-at-test-time/">Titans</a>
+and <a href="https://arxiv.org/abs/2512.24695">Nested Learning</a> offer
+examples of neural memory that updates at different rates.</p>
+<p>For the first runs, we can hold the slow weights fixed during a
+lesson and let Bob write to the fast bank as he goes. Between lessons,
+use selected traces as practice for slower updates and keep a checkpoint
+so we can roll them back. If Bob remembers who fixed a particular door,
+that detail can stay in a fast slot as long as it’s useful. If several
+attempts teach him how a latch works, replay can help him learn a skill
+the slow weights carry into other rooms. Test that skill on new doors
+and check older skills before keeping the update.</p>
+<p>At the same memory budget, compare keeping the most recent events,
+using fixed retention rules, and letting Bob learn what to save. Add
+replay and dreaming separately. Check what Bob does when an instruction
+changes, a rare fault returns, or he needs an old skill in a new
+room.</p>
+<h4 id="spend-the-learning-budget-on-surprises">Spend the learning
+budget on surprises</h4>
+<p>I want Bob to learn most from what he predicted worst. If a ball
+stops almost immediately when he expected it to roll a long way, the
+surface or the way he pushed it may be worth another look. Small misses
+below a cutoff can trigger essentially no extra learning.</p>
+<p>For a discrete outcome, measure how little probability Bob gave what
+happened. For a continuous outcome, measure the miss relative to
+ordinary variation. Subtract a cutoff, floor at zero, and cap the
+biggest scores. Use the result to prioritize replay, and recalculate as
+Bob improves.</p>
+<p>Check whether the errors shrink when Bob practices. Random clicks can
+stay surprising forever. Keep a small maintenance sample of older
+skills, and give a fast-weight slot to an experience if Bob is likely to
+need it again. An event can be worth remembering even when it was easy
+to predict.</p>
+<p><a href="https://arxiv.org/abs/1511.05952">Prioritized Experience
+Replay</a> prioritizes errors in estimating future reward. We can try
+prioritizing errors in what Bob expects to observe. Compare uniform
+replay and surprise-weighted replay with and without the cutoff at the
+same compute budget.</p>
+<h3 id="run-the-virtual-day-faster">Run the virtual day faster</h3>
+<p>A day in Bob’s virtual world should take a fraction of a day on the
+wall clock. We can batch Fig’s responses, simulate independent
+encounters in parallel, and skip stretches where nothing Bob needs to
+observe changes. Measure elapsed time across the whole training loop and
+report total compute separately.</p>
+<p>Save Bob’s fast and slow weights, the fast slots’ source tags, his
+working state, the optimizer, and the world state at the start of a day.
+Run independent lessons from that common snapshot. Lessons that depend
+on each other still need an order: knowing how a latch works changes
+what Bob can learn from a stuck door.</p>
+<p>We can pick the strongest day, build a better Groundhog Day from
+selected lessons and rerun it, or try merging weight updates from the
+shared checkpoint. <a
+href="https://proceedings.mlr.press/v162/wortsman22a.html">Model
+Soups</a> and <a href="https://arxiv.org/abs/2212.04089">Task
+Arithmetic</a> give precedents for combining weights or updates. Check
+whether the merged Bob can still use both the old and the new skills,
+including tasks that need a combination.</p>
+<p>If Bob continues from one branch, he keeps that branch’s history. If
+we reuse something from another branch, it can be remembered as
+practice. To give him a particular sequence of lived events, run the
+lessons in that order.</p>
+<p>I’d keep some failures from the discarded days. The Bob who opens the
+latch first time may never learn what the Bob who jammed it twice worked
+out. Save the failed attempt, feedback, and corrected retry together.
+Compare the faster approaches with an ordinary sequential run, and check
+whether Bob still knows how to recover from mistakes.</p>
+<h2 id="what-id-test-first">What I’d test first</h2>
+<p>We can start with small models and the same lessons. Train one on all
+speaker turns before tuning it to respond as Bob. Train a second on
+Bob’s side from the beginning, and compare both with the full setup.
+Match architecture, compute, and information available at evaluation as
+closely as practical. Report the number of tokens seen and scored, and
+how much interaction each receives.</p>
+<p>If the full setup helps, vary the pieces separately: fixed or
+adaptive lesson order, one output path or separate speech and action
+heads, memory with or without source tags, and sensory input or a
+faithful description of the same events. That will tell us which changes
+we need to keep testing.</p>
+<p>Bob puts his tool in a drawer. Alice hangs hers on a hook. Later Bob
+reads an unrelated first-person story in which the narrator says “I hung
+my tool on the hook.” Ask Bob to fetch his tool before asking him to
+explain where he put it. Swap names, voices, tools, and locations across
+held-out episodes. Run a second version of the scene in which Bob sees
+someone move his tool. Check whether he goes to the new location. <a
+href="https://arxiv.org/abs/2605.09826">EnactToM</a> makes a similar
+distinction in its tests of social reasoning: ask what another agent
+believes, then measure separately whether the learner can act on that
+information.</p>
+<p>For jailbreaks based on role switching, vary the story around an
+ordinary decision in the simulation while holding the relevant facts
+fixed. Check whether Bob keeps making his own decisions and can still
+play the character convincingly. A learner that stops acting or refuses
+to play hasn’t shown it can do both.</p>
+<p>Hold out whole families of scenes and run multiple seeds. Score
+misplaced actions, recall, belief updates, task success, and response
+timing separately. In a second kind of test, ask Bob to continue a scene
+he isn’t in. Give the characters different lines, actions, and access to
+a fact, then check whether Bob keeps each one straight.</p>
+<p>One room is enough to start. If training on Bob’s side alone helps as
+much as the full setup, we can put off the more expensive pieces. I’d
+want a gain that survives unfamiliar scenes and still lets Bob update
+when he learns something new. Then we can try longer histories, more
+complex worlds, and a richer curriculum.</p>
+<p>What I want to see before we scale this up is whether Bob can get
+better at understanding other points of view and better at keeping track
+of his own. If we can get those two things to improve together, I think
+we’ll have something worth pursuing.</p>
+<h2 id="what-are-feelings-for">What are feelings for?</h2>
+<p>I’ve also been thinking about some of the things we have that we
+rarely think of as part of intelligence. Boredom and frustration come to
+mind. They’re both unpleasant, and I suspect they’re doing a fair amount
+of useful work. I think it’s worth asking what we get from having those
+signals before we decide whether to build anything like them into
+Bob.</p>
+<p>If I’ve practiced the same thing for twenty minutes and I could do it
+in my sleep, boredom gives me a reason to look for something else to
+learn. It can also tell me an exercise has stopped making sense to me.
+<a href="https://pubmed.ncbi.nlm.nih.gov/29963873/">Westgate and
+Wilson’s work on boredom</a> points to both attention and whether we can
+see a purpose in what we’re doing. Frustration can tell me something
+different. I still want to finish, and the thing I keep trying isn’t
+working. Sometimes that makes me try harder. Sometimes it makes me put
+the screwdriver down and look at what’s actually holding the thing
+together.</p>
+<p>A language model can tell us it’s bored or frustrated. The question
+I’m interested in is whether it has anything doing that job as it goes
+along. Does it notice when the last few attempts taught it nothing? Does
+it know the difference between a task it’s mastered, one it’s slowly
+getting better at, and one where it’s stuck? <a
+href="https://adapt.informatik.hu-berlin.de/pub/papers/ims.pdf">Oudeyer
+and colleagues tried something related in robotics</a>: they gave a
+learner a reason to seek out activities where its predictions were
+improving. I’d like to see how far we can take that idea and which other
+signals turn out to be useful.</p>
+<p>We could give Bob’s decision loop a running estimate of how much he’s
+learning from an activity and how much progress he’s making toward the
+goal he’s working on. Then see what he does in a few cases: a drill he
+already knows, a puzzle where he’s making slow progress, and a puzzle he
+can’t solve without asking Fig for a clue. A useful signal should help
+him leave the first, stick with the second, and ask for help on the
+third. We could see whether that holds up without ever asking Bob to
+tell us what he feels.</p>
+<h2 id="references">References</h2>
+<h3 id="training-objectives-and-persona">Training objectives and
+persona</h3>
+<ul>
+<li><p>Ouyang et al. (2022). <a
+href="https://arxiv.org/abs/2203.02155">Training Language Models to
+Follow Instructions with Human Feedback</a>. Instruction following
+through demonstrations and human feedback.</p></li>
+<li><p>Touvron et al. (2023). <a
+href="https://arxiv.org/html/2307.09288#S3.SS1">Llama 2: Open Foundation
+and Fine-Tuned Chat Models</a>. Section 3.1 describes masking prompt
+tokens during supervised fine-tuning.</p></li>
+<li><p>Marks, Lindsey, and Olah (2026). <a
+href="https://alignment.anthropic.com/2026/psm/">The Persona Selection
+Model</a>. A research essay on how the assistant role relates to the
+repertoire of roles learned during pretraining.</p></li>
+<li><p>Lu et al. (2026). <a href="https://arxiv.org/abs/2601.10387">The
+Assistant Axis</a>. Measures persona drift and tests activation
+interventions in existing models.</p></li>
+<li><p>Hinton, Vinyals, and Dean (2015). <a
+href="https://arxiv.org/abs/1503.02531">Distilling the Knowledge in a
+Neural Network</a>. Uses a teacher’s output distribution as a training
+target.</p></li>
+<li><p>Hsieh et al. (2023). <a
+href="https://aclanthology.org/2023.findings-acl.507/">Distilling
+Step-by-Step</a>. Uses teacher-generated explanations as additional
+supervision and tests how much data the student needs.</p></li>
+<li><p>Dubiński et al. (2026). <a
+href="https://arxiv.org/abs/2604.25891">Conditional Misalignment</a>.
+Tests whether unwanted behavior can reappear under different contexts
+after interventions improve standard evaluations.</p></li>
+</ul>
+<h3 id="grounded-learning-and-perspective">Grounded learning and
+perspective</h3>
+<ul>
+<li><p>Yu, Zhang, and Xu (2018). <a
+href="https://arxiv.org/abs/1802.01433">Interactive Grounded Language
+Acquisition and Generalization in a 2D World</a>. A virtual teacher and
+an acting learner trained from scratch.</p></li>
+<li><p>Vong et al. (2024). <a
+href="https://doi.org/10.1126/science.adi1374">Grounded Language
+Acquisition Through the Eyes and Ears of a Single Child</a>. Word
+grounding from first-person recordings.</p></li>
+<li><p>Adaptive Agent Team et al. (2023). <a
+href="https://arxiv.org/abs/2301.07608">Human-Timescale Adaptation in an
+Open-Ended Task Space</a>. Embodied tasks, an adaptive curriculum, and
+memory.</p></li>
+<li><p>Zhu, Zhang, and Wang (2024). <a
+href="https://arxiv.org/abs/2402.18496">Language Models Represent
+Beliefs of Self and Others</a>. Perspective-specific belief
+representations and interventions on them.</p></li>
+<li><p>Juneja et al. (2026). <a
+href="https://arxiv.org/abs/2605.09826">EnactToM</a>. Separates belief
+reporting from belief-guided action in multi-agent tasks.</p></li>
+</ul>
+<h3 id="imagination-and-consolidation">Imagination and
+consolidation</h3>
+<ul>
+<li><p>Hafner et al. (2025). <a
+href="https://www.nature.com/articles/s41586-025-08744-2">Mastering
+Diverse Control Tasks Through World Models</a>. Learns control through
+imagined trajectories in a learned world representation.</p></li>
+<li><p>Zhou et al. (2024). <a
+href="https://arxiv.org/abs/2411.04983">DINO-WM</a>. Plans actions by
+predicting future visual features.</p></li>
+<li><p>Behrouz, Zhong, and Mirrokni (2025). <a
+href="https://research.google/pubs/titans-learning-to-memorize-at-test-time/">Titans:
+Learning to Memorize at Test Time</a>. A neural memory that updates
+while the model processes a sequence.</p></li>
+<li><p>Behrouz et al. (2025). <a
+href="https://arxiv.org/abs/2512.24695">Nested Learning</a>. A memory
+system with components that update at different frequencies.</p></li>
+<li><p>Behrouz et al. (2026). <a
+href="https://arxiv.org/abs/2606.03979">Language Models Need Sleep</a>.
+Explores consolidation and synthetic practice in a separate learning
+phase.</p></li>
+<li><p>Schaul et al. (2016). <a
+href="https://arxiv.org/abs/1511.05952">Prioritized Experience
+Replay</a>. Prioritizes replay using errors in estimates of future
+reward.</p></li>
+</ul>
+<h3 id="parallel-training-and-weight-merging">Parallel training and
+weight merging</h3>
+<ul>
+<li><p>Wortsman et al. (2022). <a
+href="https://proceedings.mlr.press/v162/wortsman22a.html">Model
+Soups</a>. Compares averaging fine-tuned weights with selecting a single
+model.</p></li>
+<li><p>Ilharco et al. (2023). <a
+href="https://arxiv.org/abs/2212.04089">Editing Models with Task
+Arithmetic</a>. Experiments with combining changes from a shared
+starting checkpoint.</p></li>
+</ul>
+</article><p class="wrap authorship-note">Written with AI assistance. The opinions, conclusions, and beliefs are my own. &mdash; Daniel Jackson</p></main><footer class="wrap"><a href="../">Synaptic Lens</a><span>Daniel Jackson · Independent AI research</span><a href="https://github.com/danielrjackson/synaptic-lens/issues">Questions &amp; discussion ↗</a></footer></body></html>
