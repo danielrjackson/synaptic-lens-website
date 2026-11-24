@@ -17,12 +17,15 @@ jobs:
           repository: danielrjackson/synaptic-lens
           path: library
           persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.13'
       - run: python3 scripts/check_neuron_demo.py
       - run: node scripts/check_neuron_impact.mjs
       - name: Verify gallery pixels and provenance
         run: |
           python3 -m venv /tmp/gallery-check
-          /tmp/gallery-check/bin/pip install Pillow==13.0.0
+          /tmp/gallery-check/bin/python -m pip --isolated install --index-url https://pypi.org/simple --no-deps --require-hashes --only-binary=:all: -r requirements/website-gallery.txt
           /tmp/gallery-check/bin/python scripts/check_training_gallery.py
       - run: python3 scripts/build.py --library library --output dist
       - run: python3 scripts/check_links.py dist
